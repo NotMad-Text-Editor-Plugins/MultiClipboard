@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\src\MCSubClassWndProc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MultiClipboardProxy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Ccpp\ImageListSet.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Ccpp\StaticDialog.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Ccpp\stdafx.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\AboutDlg\AboutDialog.cpp">
+      <Filter>Source Files\AboutDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardControls\MultiClipboardContextMenu.cpp">
+      <Filter>Source Files\ClipboardControls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardControls\MultiClipboardEditbox.cpp">
+      <Filter>Source Files\ClipboardControls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardControls\MultiClipboardListbox.cpp">
+      <Filter>Source Files\ClipboardControls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardControls\SplitterPanel.cpp">
+      <Filter>Source Files\ClipboardControls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardControls\ToolbarPanel.cpp">
+      <Filter>Source Files\ClipboardControls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardMVC\ClipboardList.cpp">
+      <Filter>Source Files\ClipboardMVC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardMVC\ModelViewController.cpp">
+      <Filter>Source Files\ClipboardMVC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardMVC\MultiClipCyclicPaste.cpp">
+      <Filter>Source Files\ClipboardMVC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardMVC\MultiClipPasteMenu.cpp">
+      <Filter>Source Files\ClipboardMVC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardMVC\MultiClipViewerDialog.cpp">
+      <Filter>Source Files\ClipboardMVC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardMVC\OSClipboardController.cpp">
+      <Filter>Source Files\ClipboardMVC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardMVC\SelectedTextAutoCopier.cpp">
+      <Filter>Source Files\ClipboardMVC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardSettings\LoonySettingsManager.cpp">
+      <Filter>Source Files\ClipboardSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardSettings\MultiClipboardSettingsDialog.cpp">
+      <Filter>Source Files\ClipboardSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Unity_MultiClipboard.cpp">
+      <Filter>Source Files\Unity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Ccpp\SysMsg.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Ccpp\ToolBar.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Ccpp\URLCtrl.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MultiClipboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.cpp">
+      <Filter>Source Files\ClipboardMVC</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\MCSubClassWndProc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\MultiClipboardProxy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\MultiClipboardStringType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\Docking.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\DockingDlgInterface.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\ImageListSet.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\Notepad_plus_msgs.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\Notepad_plus_rc.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\PluginInterface.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\SciSubClassWrp.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\StaticDialog.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\stdafx.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\SysMsg.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\ToolBar.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\URLCtrl.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\Ccpp\Window.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\AboutDlg\AboutDialog.h">
+      <Filter>Header Files\AboutDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardControls\MultiClipboardContextMenu.h">
+      <Filter>Header Files\ClipboardControls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardControls\MultiClipboardEditbox.h">
+      <Filter>Header Files\ClipboardControls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardControls\MultiClipboardListbox.h">
+      <Filter>Header Files\ClipboardControls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardControls\SplitterPanel.h">
+      <Filter>Header Files\ClipboardControls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardControls\ToolbarPanel.h">
+      <Filter>Header Files\ClipboardControls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardMVC\ClipboardList.h">
+      <Filter>Header Files\ClipboardMVC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardMVC\ModelViewController.h">
+      <Filter>Header Files\ClipboardMVC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardMVC\MultiClipCyclicPaste.h">
+      <Filter>Header Files\ClipboardMVC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardMVC\MultiClipPasteMenu.h">
+      <Filter>Header Files\ClipboardMVC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardMVC\MultiClipViewerDialog.h">
+      <Filter>Header Files\ClipboardMVC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardMVC\OSClipboardController.h">
+      <Filter>Header Files\ClipboardMVC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardMVC\SelectedTextAutoCopier.h">
+      <Filter>Header Files\ClipboardMVC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\NativeLang\src\NativeLang_def.h">
+      <Filter>Header Files\NativeLang</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardSettings\LoonySettingsManager.h">
+      <Filter>Header Files\ClipboardSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardSettings\MultiClipboardSettings.h">
+      <Filter>Header Files\ClipboardSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardSettings\MultiClipboardSettingsDialog.h">
+      <Filter>Header Files\ClipboardSettings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TinyXML\tinystr.h">
+      <Filter>Header Files\TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TinyXML\tinyxml.h">
+      <Filter>Header Files\TinyXML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Scintilla.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.h">
+      <Filter>Header Files\ClipboardMVC</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\res\delete.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\down.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\leftright.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\multiclipboard.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\multiclipboard.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\lang\MultiClipboard_en.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\paste.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\up.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\updown.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\brick_go.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\page_white_stack.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\bin_empty.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\res\cog.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{249b0d22-9296-4172-bbe3-f7fb6d5b1a36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{55c9cb55-b3db-4bc5-a697-7b8bd3622a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{3a19b324-de31-4096-9ed3-c8325f3c168f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{0447afa3-9611-461d-9c02-0ed02df39662}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\AboutDlg">
+      <UniqueIdentifier>{1e648e16-d741-4ce6-b051-caecb1f21702}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ClipboardControls">
+      <UniqueIdentifier>{a48a531a-652a-4411-a4a4-ffefc91206c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ClipboardMVC">
+      <UniqueIdentifier>{56c75aa0-3747-4ac2-b47f-29d13252ea1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ClipboardSettings">
+      <UniqueIdentifier>{88689b44-2fe9-4745-97ee-2383ec6f30e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Unity">
+      <UniqueIdentifier>{2f7fbc21-4b5e-4c62-83d5-528c2ea6cddf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common">
+      <UniqueIdentifier>{77b49b84-1416-43c5-8e84-e3b04cc827ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\AboutDlg">
+      <UniqueIdentifier>{f284964a-7bae-4009-9bb9-4be5a014d016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ClipboardControls">
+      <UniqueIdentifier>{c719cfea-901c-413c-9286-953780a2d202}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ClipboardMVC">
+      <UniqueIdentifier>{fabc6da4-f8f8-4ed8-bd21-893e456f011d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\NativeLang">
+      <UniqueIdentifier>{5ed9ea85-84f1-470d-98ef-9cbafb0c3fdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ClipboardSettings">
+      <UniqueIdentifier>{f787e012-7a6d-4bf0-9f44-140e95f1c3ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TinyXML">
+      <UniqueIdentifier>{ff8ac628-4c4e-4dd4-9b59-158c615295dd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\src\MultiClipboard.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
