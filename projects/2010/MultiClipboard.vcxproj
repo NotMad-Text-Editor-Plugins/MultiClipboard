@@ -85,34 +85,42 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC70.props" />
+    <Import Project="..\..\..\plugins_dev.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC70.props" />
+    <Import Project="..\..\..\plugins_dev.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC70.props" />
+    <Import Project="..\..\..\plugins_dev.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC70.props" />
+    <Import Project="..\..\..\plugins_dev.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC70.props" />
+    <Import Project="..\..\..\plugins_dev.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC70.props" />
+    <Import Project="..\..\..\plugins_dev.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC70.props" />
+    <Import Project="..\..\..\plugins_dev.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC70.props" />
+    <Import Project="..\..\..\plugins_dev.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -149,8 +157,8 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>shlwapi.lib;comctl32.lib;tinyxml.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(IntDir)MultiClipboard.dll</OutputFile>
+      <AdditionalDependencies>shlwapi.lib;comctl32.lib;tinyxml32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(DLLOU_)</OutputFile>
       <AdditionalLibraryDirectories>../../src/TinyXML;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)MultiClipboard.pdb</ProgramDatabaseFile>
@@ -160,9 +168,8 @@
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(IntDir)*.dll ..\..\..\Notepad++\plugins\ /Y
-xcopy $(IntDir)*.pdb ..\..\..\Notepad++\plugins\ /Y
-xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeLang.ini /Y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -180,7 +187,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     </ClCompile>
     <Link>
       <AdditionalDependencies>shlwapi.lib;comctl32.lib;tinyxml.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(IntDir)MultiClipboard.dll</OutputFile>
+      <OutputFile>$(DLLOU)</OutputFile>
       <AdditionalLibraryDirectories>../../src/TinyXML;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)MultiClipboard.pdb</ProgramDatabaseFile>
@@ -189,9 +196,8 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
       <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(IntDir)*.dll ..\..\..\Notepad++\plugins\ /Y
-xcopy $(IntDir)*.pdb ..\..\..\Notepad++\plugins\ /Y
-xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeLang.ini /Y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -227,7 +233,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../src/TinyXML;../../../Common/Ccpp;../../../NativeLang/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/TinyXML;../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../../Common/Ccpp;../../../NativeLang/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MultiClipboard_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
@@ -239,7 +245,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     </ClCompile>
     <Link>
       <AdditionalDependencies>legacy_stdio_definitions.lib;shlwapi.lib;comctl32.lib;tinyxml.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(IntDir)MultiClipboard.dll</OutputFile>
+      <OutputFile>$(DLLOU)</OutputFile>
       <AdditionalLibraryDirectories>../../src/TinyXML;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -249,9 +255,8 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
       <ImportLibrary>$(OutDir)MultiClipboard.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy $(IntDir)*.dll ..\..\..\Notepad++\plugins\ /Y
-xcopy $(IntDir)*.pdb ..\..\..\Notepad++\plugins\ /Y
-xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeLang.ini /Y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">
@@ -370,6 +375,9 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\ImageListSet\ImageListSet.cpp" />
+    <ClCompile Include="..\..\..\Common\Ccpp\ToolBar.cpp" />
+    <ClCompile Include="..\..\..\Common\Ccpp\URLCtrl.cpp" />
     <ClCompile Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
@@ -394,12 +402,6 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\ImageListSet.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\..\Common\Ccpp\StaticDialog.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
@@ -413,18 +415,6 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\Common\Ccpp\SysMsg.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\ToolBar.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\URLCtrl.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>

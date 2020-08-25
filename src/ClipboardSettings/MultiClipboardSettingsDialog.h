@@ -32,9 +32,15 @@ class MultiClipboardSettingsDialog : public StaticDialog
 public:
 	void Init( HINSTANCE hInst, HWND hNpp );
 	void ShowDialog( bool Show = TRUE );
+	virtual void create(int dialogID, bool isRTL = false, bool msgDestParent = true) {
+        StaticDialog::create(dialogID, isRTL, msgDestParent);
+    };
 
+	void destroy() {
+		// A Ajouter les fils...
+	};
 protected:
-	virtual BOOL CALLBACK run_dlgProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
 	void LoadMultiClipboardSettings();

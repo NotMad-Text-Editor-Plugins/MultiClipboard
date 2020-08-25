@@ -33,14 +33,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // messages needs to be added in resource.h
 
 ToolBarButtonUnit ListBoxToolBarButtons[] = {
-	{IDM_EX_UP, -1, -1, -1, IDB_EX_UP, 0 },
-	{IDM_EX_DOWN, -1, -1, -1, IDB_EX_DOWN, 0 },
-	{IDM_EX_PASTE, -1, -1, -1, IDB_EX_PASTE, 0 },
-	{IDM_EX_PASTE_ALL, -1, -1, -1, IDB_EX_PASTE_ALL, 0 },
-	{IDM_EX_COPY_TO_CLIPBOARD, -1, -1, -1, IDB_EX_COPY_TO_CLIPBOARD, 0 },
-	{IDM_EX_DELETE, -1, -1, -1, IDB_EX_DELETE, 0 },
-	{IDM_EX_DELETE_ALL, -1, -1, -1, IDB_EX_DELETE_ALL, 0 },
-	{IDM_EX_OPTIONS, -1, -1, -1, IDB_EX_OPTIONS, 0 }
+	{IDM_EX_UP, -1, -1, -1, IDB_EX_UP },
+	{IDM_EX_DOWN, -1, -1, -1, IDB_EX_DOWN },
+	{IDM_EX_PASTE, -1, -1, -1, IDB_EX_PASTE },
+	{IDM_EX_PASTE_ALL, -1, -1, -1, IDB_EX_PASTE_ALL },
+	{IDM_EX_COPY_TO_CLIPBOARD, -1, -1, -1, IDB_EX_COPY_TO_CLIPBOARD },
+	{IDM_EX_DELETE, -1, -1, -1, IDB_EX_DELETE },
+	{IDM_EX_DELETE_ALL, -1, -1, -1, IDB_EX_DELETE_ALL },
+	{IDM_EX_OPTIONS, -1, -1, -1, IDB_EX_OPTIONS }
 };
 #define ListBoxToolBarSize sizeof(ListBoxToolBarButtons)/sizeof(ToolBarButtonUnit)
 
@@ -77,11 +77,9 @@ MultiClipViewerDialog::MultiClipViewerDialog()
 {
 }
 
-
 MultiClipViewerDialog::~MultiClipViewerDialog()
 {
 }
-
 
 void MultiClipViewerDialog::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
 {
@@ -100,33 +98,39 @@ void MultiClipViewerDialog::Shutdown()
 	pDropSource->Release();
 }
 
+#define SELF_REFRESH WM_USER+9
 
 void MultiClipViewerDialog::ShowDialog( bool Show )
 {
 	if ( !isCreated() )
 	{
+		//::MessageBox(NULL, TEXT("isCreated"), TEXT(""), MB_OK);
 		create( &TBData );
 
 		// define the default docking behaviour
-		if ( !NLGetText( g_hInstance, g_NppData._nppHandle, TEXT("MultiClip Viewer"), TBData.pszName, MAX_PATH) )
+		TBData.pszName = new TCHAR[MAX_PATH]; //here
+		if ( !NLGetText( g_hInstance, g_NppData._nppHandle, TEXT("MultiClip Viewer"), (LPTSTR)TBData.pszName, MAX_PATH) )
 		{
-			lstrcpy( TBData.pszName, TEXT("MultiClip Viewer") );
+			lstrcpy( (LPTSTR)TBData.pszName, TEXT("MultiClip Viewer") );
 		}
 		TBData.uMask			= DWS_DF_CONT_LEFT | DWS_ICONTAB;
 		TBData.hIconTab		= (HICON)::LoadImage(_hInst, MAKEINTRESOURCE(IDI_MULTICLIPBOARD), IMAGE_ICON, 0, 0, LR_LOADMAP3DCOLORS | LR_LOADTRANSPARENT);
 		TBData.pszModuleName	= getPluginFileName();
 		TBData.dlgID			= MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX;
+
 		::SendMessage( _hParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&TBData );
 	}
 
 	display( Show );
 	IsShown = Show;
+	//::SendMessage( _hSelf, SELF_REFRESH, LocationPos, 0);
 	ShowClipText();
 }
 
 
-BOOL CALLBACK MultiClipViewerDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp )
+INT_PTR CALLBACK MultiClipViewerDialog::run_dlgProc( UINT msg, WPARAM wp, LPARAM lp )
 {
+	//if(1)return 0;
 	if ( msg == DragListMessage )
 	{
 		return OnDragListMessage( (LPDRAGLISTINFO)lp );
@@ -135,7 +139,22 @@ BOOL CALLBACK MultiClipViewerDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp
 	switch ( msg )
 	{
 	case WM_INITDIALOG:
-		InitialiseDialog();
+		MultiClipViewerPanel.init( _hInst, _hSelf );
+
+		ListBoxPanel.init( _hInst, MultiClipViewerPanel.getHSelf() );
+		MultiClipViewerListbox.init( _hInst, ListBoxPanel.getHSelf() );
+		MultiClipViewerPanel.pChildWin1 = &ListBoxPanel;
+		ListBoxPanel.SetChildWindow( &MultiClipViewerListbox );
+		ListBoxToolBar.init( _hInst, ListBoxPanel.getHSelf(), TB_STANDARD, ListBoxToolBarButtons, ListBoxToolBarSize );
+		ListBoxToolBar.display();
+		ListBoxPanel.SetToolbar( &ListBoxToolBar );
+
+		EditBoxPanel.init( _hInst, MultiClipViewerPanel.getHSelf() );
+		MultiClipViewerEditBox.init( _hInst, EditBoxPanel.getHSelf() );
+		MultiClipViewerPanel.pChildWin2 = &EditBoxPanel;
+		EditBoxPanel.SetChildWindow( &MultiClipViewerEditBox );
+		MultiClipViewerEditBox.EnableEditBox( FALSE );
+
 		break;
 
 	case WM_SIZE:
@@ -206,7 +225,7 @@ BOOL CALLBACK MultiClipViewerDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp
 					}
 				default:
 					// Parse all other notifications to docking dialog interface
-					return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
+					return DockingDlgInterface::run_dlgProc( msg, wp, lp );
 				}
 			}
 			else if ( nmhdr->code == TTN_GETDISPINFO )
@@ -224,7 +243,7 @@ BOOL CALLBACK MultiClipViewerDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp
 					pt.x = lpnm->rc.left;
 					pt.y = lpnm->rc.bottom;
 					ClientToScreen( nmhdr->hwndFrom, &pt );
-					OnToolBarCommand( ListBoxToolBar.doPopop( pt ) );
+					//OnToolBarCommand( ListBoxToolBar.doPopop( pt ) );
 					return TRUE;
 				}
 				break;
@@ -232,7 +251,7 @@ BOOL CALLBACK MultiClipViewerDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp
 			else
 			{
 				// Parse all other notifications to docking dialog interface
-				return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
+				return DockingDlgInterface::run_dlgProc( msg, wp, lp );
 			}
 			break;
 		}
@@ -243,30 +262,10 @@ BOOL CALLBACK MultiClipViewerDialog::run_dlgProc( HWND hWnd, UINT msg, WPARAM wp
 		break;
 
 	default:
-		return DockingDlgInterface::run_dlgProc( _hSelf, msg, wp, lp );
+		return DockingDlgInterface::run_dlgProc( msg, wp, lp );
 	}
 
-	return FALSE;
-}
-
-
-void MultiClipViewerDialog::InitialiseDialog()
-{
-	MultiClipViewerPanel.init( _hInst, _hSelf );
-
-	ListBoxPanel.init( _hInst, MultiClipViewerPanel.getHSelf() );
-	MultiClipViewerListbox.init( _hInst, ListBoxPanel.getHSelf() );
-	MultiClipViewerPanel.pChildWin1 = &ListBoxPanel;
-	ListBoxPanel.SetChildWindow( &MultiClipViewerListbox );
-	ListBoxToolBar.init( _hInst, ListBoxPanel.getHSelf(), TB_STANDARD, ListBoxToolBarButtons, ListBoxToolBarSize );
-	ListBoxToolBar.display();
-	ListBoxPanel.SetToolbar( &ListBoxToolBar );
-
-	EditBoxPanel.init( _hInst, MultiClipViewerPanel.getHSelf() );
-	MultiClipViewerEditBox.init( _hInst, EditBoxPanel.getHSelf() );
-	MultiClipViewerPanel.pChildWin2 = &EditBoxPanel;
-	EditBoxPanel.SetChildWindow( &MultiClipViewerEditBox );
-	MultiClipViewerEditBox.EnableEditBox( FALSE );
+	return TRUE;
 }
 
 
@@ -509,7 +508,7 @@ BOOL MultiClipViewerDialog::OnDragListMessage( LPDRAGLISTINFO pDragListInfo )
 
 		// Store the return value in DWL_MSGRESULT. Set to false so we don't receive the rest of the drag messages
 		// http://support.microsoft.com/kb/183115
-		SetWindowLong( getHSelf(), DWL_MSGRESULT, FALSE );
+		SetWindowLongPtr( getHSelf(), DWLP_MSGRESULT, FALSE );
 	}
 	return TRUE;
 }

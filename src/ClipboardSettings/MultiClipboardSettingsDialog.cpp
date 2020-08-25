@@ -95,7 +95,7 @@ void MultiClipboardSettingsDialog::ShowDialog( bool Show )
 }
 
 
-BOOL CALLBACK MultiClipboardSettingsDialog::run_dlgProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
+INT_PTR CALLBACK MultiClipboardSettingsDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch ( message )
 	{
@@ -237,7 +237,7 @@ void MultiClipboardSettingsDialog::DisplayMouseOverIDHelp( int ControlID )
 void MultiClipboardSettingsDialog::SubclassChildControl( const int ControlID )
 {
 	HWND hChild = GetDlgItem( _hSelf, ControlID );
-	WNDPROC ChildWndProc = (WNDPROC) SetWindowLong( hChild, GWL_WNDPROC, (LONG) MCBSettingsChildCtrlDlgProc );
+	WNDPROC ChildWndProc = (WNDPROC) SetWindowLongPtr( hChild, GWLP_WNDPROC, (LONG_PTR) MCBSettingsChildCtrlDlgProc );
 	::SetWindowLongPtr( hChild, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(ChildWndProc) );
 }
 
@@ -245,7 +245,7 @@ void MultiClipboardSettingsDialog::SubclassChildControl( const int ControlID )
 void MultiClipboardSettingsDialog::SubclassStaticTextChildControl( const int ControlID )
 {
 	HWND hChild = GetDlgItem( _hSelf, ControlID );
-	WNDPROC ChildWndProc = (WNDPROC) SetWindowLong( hChild, GWL_WNDPROC, (LONG) StaticTextChildCtrlDlgDlgProc );
+	WNDPROC ChildWndProc = (WNDPROC) SetWindowLongPtr( hChild, GWLP_WNDPROC, (LONG_PTR) StaticTextChildCtrlDlgDlgProc );
 	::SetWindowLongPtr( hChild, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(ChildWndProc) );
 }
 

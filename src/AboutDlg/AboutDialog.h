@@ -41,6 +41,10 @@ public:
 		Window::init(hInst, nppData._nppHandle);
 	};
 
+	virtual void create(int dialogID, bool isRTL = false, bool msgDestParent = true) {
+		StaticDialog::create(dialogID, isRTL, msgDestParent);
+	};
+
    	void doDialog();
 
     virtual void destroy() {
@@ -50,7 +54,7 @@ public:
 
 
 protected :
-	virtual BOOL CALLBACK run_dlgProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+	virtual INT_PTR CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
 	// Handles

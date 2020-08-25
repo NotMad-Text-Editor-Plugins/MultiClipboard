@@ -54,7 +54,7 @@ private:
 	// Subclass the list box's wnd proc for customised behavior
 	static LRESULT CALLBACK StaticListboxProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 	{
-		return ((MultiClipboardListbox *)(::GetWindowLongPtr(hwnd, GWL_USERDATA)))->runProc( hwnd, message, wParam, lParam );
+		return ((MultiClipboardListbox *)(::GetWindowLongPtr(hwnd, GWLP_USERDATA)))->runProc( hwnd, message, wParam, lParam );
 	};
 	LRESULT runProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 };

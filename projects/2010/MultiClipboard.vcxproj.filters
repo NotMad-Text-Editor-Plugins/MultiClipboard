@@ -7,9 +7,6 @@
     <ClCompile Include="..\..\src\MultiClipboardProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\ImageListSet.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Common\Ccpp\StaticDialog.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
@@ -67,17 +64,20 @@
     <ClCompile Include="..\..\..\Common\Ccpp\SysMsg.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\ToolBar.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\URLCtrl.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\MultiClipboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.cpp">
       <Filter>Source Files\ClipboardMVC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Ccpp\ToolBar.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\ImageListSet\ImageListSet.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Common\Ccpp\URLCtrl.cpp">
+      <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

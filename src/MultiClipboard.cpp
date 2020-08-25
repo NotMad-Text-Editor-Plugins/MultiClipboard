@@ -158,7 +158,7 @@ extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 	g_ClipboardProxy.Init();
 
 	// Subclass the Notepad++ windows procedure
-	g_NppWndProc = (WNDPROC) SetWindowLong( g_NppData._nppHandle, GWL_WNDPROC, (LONG) MCSubClassNppWndProc );
+	g_NppWndProc = (WNDPROC) SetWindowLongPtr( g_NppData._nppHandle, GWLP_WNDPROC, (LONG_PTR) MCSubClassNppWndProc );
 	// As well as the 2 scintilla windows'
 	g_ScintillaMain.Init( g_NppData._scintillaMainHandle, MCSubClassSciWndProc );
 	g_ScintillaSecond.Init( g_NppData._scintillaSecondHandle, MCSubClassSciWndProc );

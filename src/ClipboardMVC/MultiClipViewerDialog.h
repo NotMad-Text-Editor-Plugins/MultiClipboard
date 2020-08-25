@@ -52,10 +52,7 @@ public:
 
 protected:
 	// Overload DockingDlgInterface's dialog procedure
-	virtual BOOL CALLBACK run_dlgProc( HWND hWnd, UINT msg, WPARAM wp, LPARAM lp );
-
-	// Initialise dialog here
-	void InitialiseDialog();
+	virtual INT_PTR CALLBACK run_dlgProc( UINT msg, WPARAM wp, LPARAM lp );
 
 	// Toolbar commands
 	void tb_cmd(UINT message);

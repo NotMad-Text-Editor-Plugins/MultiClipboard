@@ -39,10 +39,10 @@ void MultiClipboardListbox::init(HINSTANCE hInst, HWND parent)
 	}
 
 	// subclass the listbox control
-	oldWndProc = (WNDPROC)::SetWindowLong( _hSelf, GWL_WNDPROC, (LONG)StaticListboxProc );
+	oldWndProc = (WNDPROC)::SetWindowLongPtr( _hSelf, GWLP_WNDPROC, (LONG_PTR)StaticListboxProc );
 
 	// associate this class instance with the listbox instance
-	::SetWindowLongPtr( _hSelf, GWL_USERDATA, (LONG)this );
+	::SetWindowLongPtr( _hSelf, GWLP_USERDATA, (LONG_PTR)this );
 
 	// Make items draggable
 	MakeDragList( _hSelf );

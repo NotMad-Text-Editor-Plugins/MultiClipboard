@@ -67,12 +67,11 @@ void TextItem::SplitTextIntoRows( std::vector< std::wstring > & rowTexts ) const
 
 	unsigned int lastFindOffset = 0;
 	unsigned int currentFindOffset = text.find_first_of( TEXT("\r\n"), lastFindOffset );
-	while ( currentFindOffset != std::string::npos )
+	while ( currentFindOffset >=lastFindOffset && currentFindOffset<strLen )
 	{
 		// Store each row of text
 		rowTexts.push_back( text.substr( lastFindOffset, currentFindOffset-lastFindOffset ) );
 
-		// Handle CRLF line ending, to prevent counting it as 2 lines
 		if ( text[currentFindOffset] == TEXT('\r') && currentFindOffset+1 < strLen && text[currentFindOffset+1] == TEXT('\n') )
 		{
 			lastFindOffset = currentFindOffset + 2;
