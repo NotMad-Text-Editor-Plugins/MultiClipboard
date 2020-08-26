@@ -6,6 +6,8 @@ VS-like Multiple Clipboard Plugin for Notepad++.
 
 - dependency NativeLang_def.h
 
+![asd](https://github.com/NotMad-Text-Editor-Plugins/MultiClipboard/blob/master/res/paste_muple.ico)
+
 MultiClipboard 2
 ================
 
