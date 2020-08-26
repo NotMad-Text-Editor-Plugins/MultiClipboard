@@ -1,4 +1,3 @@
-# LocationNavigate
 VS-like Multiple Clipboard Plugin for Notepad++.
 
 - Upgraded from https://www.peepor.net/loonchew/download.php?f=multiclipboard_2_0_0_src
