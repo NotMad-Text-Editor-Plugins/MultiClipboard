@@ -79,6 +79,7 @@
     <ClCompile Include="..\..\..\Common\Ccpp\URLCtrl.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\PowerEditor\src\wutils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\MCSubClassWndProc.h">
@@ -103,9 +104,6 @@
       <Filter>Header Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Common\Ccpp\Notepad_plus_msgs.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\Notepad_plus_rc.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Common\Ccpp\PluginInterface.h">
@@ -291,5 +289,8 @@
     <ResourceCompile Include="..\..\src\MultiClipboard.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\res\paste_muple.ico" />
   </ItemGroup>
 </Project>

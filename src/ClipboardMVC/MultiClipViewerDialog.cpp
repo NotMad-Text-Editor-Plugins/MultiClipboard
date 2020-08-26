@@ -139,6 +139,7 @@ INT_PTR CALLBACK MultiClipViewerDialog::run_dlgProc( UINT msg, WPARAM wp, LPARAM
 	switch ( msg )
 	{
 	case WM_INITDIALOG:
+	{
 		MultiClipViewerPanel.init( _hInst, _hSelf );
 
 		ListBoxPanel.init( _hInst, MultiClipViewerPanel.getHSelf() );
@@ -155,7 +156,25 @@ INT_PTR CALLBACK MultiClipViewerDialog::run_dlgProc( UINT msg, WPARAM wp, LPARAM
 		EditBoxPanel.SetChildWindow( &MultiClipViewerEditBox );
 		MultiClipViewerEditBox.EnableEditBox( FALSE );
 
+
+		bool enlarge_text = ::SendMessage(g_NppData._nppHandle, NPPM_GETENLARGETEXT, 0, 0);
+		if(enlarge_text) {
+			//::MessageBox(NULL, TEXT("enlarge_text"), TEXT(""), MB_OK);
+
+			LOGFONT logfont{};
+			//ZeroMemory(&logfont, sizeof(LOGFONT));
+			logfont.lfCharSet = GB2312_CHARSET;
+			//logfont.lfWeight = 550;
+			//HFONT hFont = (HFONT)lParam;
+			//SendMessage(_hSelf,WM_SETFONT,(WPARAM)hFont,0);
+			logfont.lfHeight = -21;
+			auto hFont = CreateFontIndirect(&logfont);
+
+			setWindowFont(_hSelf, hFont);
+		}
+
 		break;
+	}
 
 	case WM_SIZE:
 	case WM_MOVE:
@@ -441,7 +460,7 @@ void MultiClipViewerDialog::OnToolBarCommand( UINT Cmd )
 		return;
 
 	case IDM_EX_OPTIONS:
-		OptionsDlg.ShowDialog();
+		OptionsDlg.ShowDialog(!OptionsDlg.isVisible());
 		return;
 	}
 

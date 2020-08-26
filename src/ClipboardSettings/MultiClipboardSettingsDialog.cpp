@@ -85,24 +85,42 @@ void MultiClipboardSettingsDialog::ShowDialog( bool Show )
 		LoadSettingsControlMap();
 		SubclassAllChildControls();
 	}
+	display( Show );
 	if ( Show )
 	{
 		LoadMultiClipboardSettings();
+		goToCenter();
 	}
-	display( Show );
 
-	goToCenter();
 }
-
 
 INT_PTR CALLBACK MultiClipboardSettingsDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch ( message )
 	{
 	case WM_INITDIALOG:
+	{
 		// Change language
+		bool enlarge_text = ::SendMessage(g_NppData._nppHandle, NPPM_GETENLARGETEXT, 0, 0);
+		if(enlarge_text) {
+			//::MessageBox(NULL, TEXT("enlarge_text"), TEXT(""), MB_OK);
+
+			LOGFONT logfont{};
+			//ZeroMemory(&logfont, sizeof(LOGFONT));
+			logfont.lfCharSet = GB2312_CHARSET;
+			//logfont.lfWeight = 550;
+			//HFONT hFont = (HFONT)lParam;
+			//SendMessage(_hSelf,WM_SETFONT,(WPARAM)hFont,0);
+			logfont.lfHeight = -21;
+			auto hFont = CreateFontIndirect(&logfont);
+
+			setWindowFont(_hSelf, hFont);
+		}
+
 		NLChangeDialog( _hInst, g_NppData._nppHandle, _hSelf, TEXT("Options") );
+
 		return TRUE;
+	}
 
 	case WM_COMMAND:
 		if ( ( HIWORD(wParam) == NM_MOUSE_OVER_CONTROL ) && ( LOWORD(wParam) != 0 ) )
@@ -210,15 +228,16 @@ void MultiClipboardSettingsDialog::SaveMultiClipboardSettings()
 	}
 }
 
+int MupleCBlastHelp=0;
 
 void MultiClipboardSettingsDialog::DisplayMouseOverIDHelp( int ControlID )
 {
-	if ( ControlID == 0 )
+	if ( ControlID == 0 || MupleCBlastHelp==ControlID)
 	{
-		::SetDlgItemText( _hSelf, IDC_OPTION_EXPLANATION, TEXT("") );
+		//::SetDlgItemText( _hSelf, IDC_OPTION_EXPLANATION, TEXT("") );
 		return;
 	}
-
+	MupleCBlastHelp = ControlID;
 	std::wostringstream HelpNativeLangIndex;
 	HelpNativeLangIndex << ControlID << TEXT("_HELP");
 	std::vector< TCHAR > HelpText(512);

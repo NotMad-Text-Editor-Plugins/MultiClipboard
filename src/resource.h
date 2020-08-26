@@ -2,6 +2,20 @@
 // Microsoft Visual C++ generated include file.
 // Used by MultiClipboard.rc
 //
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+
 #define IDB_EX_MULTICLIPBOARD           110
 #define IDB_EX_UP                       111
 #define IDB_EX_DOWN                     112
@@ -15,6 +29,7 @@
 #define IDC_LEFTRIGHT                   120
 #define IDC_UPDOWN                      121
 #define IDD_OPTIONS_DLG                 122
+#define IDR_MULTICLIPBOARD_ICO          123
 #define IDC_OPTION_GROUPS               1000
 #define IDC_OPTION_EXPLANATION          1001
 #define IDC_EDIT_MAX_CLIPLIST_SIZE      1002

@@ -52,7 +52,7 @@ NppData				g_NppData;
 MultiClipboardProxy	g_ClipboardProxy;
 LoonySettingsManager g_SettingsManager( TEXT("MultiClipboardSettings") );
 FuncItem			funcItem[nbFunc];
-toolbarIcons		g_TBWndMgr;
+toolbarIcons		g_TBWndMgr{0,0,0x666,0,IDR_MULTICLIPBOARD_ICO,0,0,IDB_EX_MULTICLIPBOARD};
 SciSubClassWrp		g_ScintillaMain, g_ScintillaSecond;
 WNDPROC				g_NppWndProc;
 
@@ -205,9 +205,18 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
 
 		// On this notification code you can register your plugin icon in Notepad++ toolbar
 		if (notifyCode->nmhdr.code == NPPN_TBMODIFICATION)
-		{
-			g_TBWndMgr.hToolbarBmp = (HBITMAP)::LoadImage( (HINSTANCE)g_hInstance, MAKEINTRESOURCE(IDB_EX_MULTICLIPBOARD), IMAGE_BITMAP, 0, 0, (LR_LOADMAP3DCOLORS) );
-			::SendMessage( g_NppData._nppHandle, NPPM_ADDTOOLBARICON, (WPARAM)funcItem[MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX]._cmdID, (LPARAM)&g_TBWndMgr );
+		{		
+			auto HRO = (HINSTANCE)g_hInstance;
+
+			long version = ::SendMessage(g_NppData._nppHandle, NPPM_GETNOTMADVERSION, 0, 0);
+
+			bool legacy = version<0x666;
+
+			g_TBWndMgr.HRO = HRO;
+			if(legacy)g_TBWndMgr.hToolbarBmp = (HBITMAP)::LoadImage(HRO, MAKEINTRESOURCE(IDB_EX_MULTICLIPBOARD), IMAGE_BITMAP, 0, 0, (LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
+			::SendMessage(g_NppData._nppHandle, NPPM_ADDTOOLBARICON, (WPARAM)funcItem[MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX]._cmdID, (LPARAM)&g_TBWndMgr);
+
+			
 		}
 	}
 }
@@ -283,10 +292,15 @@ void ShutDownPlugin()
 void ToggleView(void)
 {
 	// get menu and test if dockable dialog is open
-	HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
-	UINT state = ::GetMenuState(hMenu, funcItem[MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX]._cmdID, MF_BYCOMMAND);
+	bool nxtShow = 1;
 
-	clipViewerDialog.ShowDialog( state & MF_CHECKED ? false : true );
+	nxtShow = !clipViewerDialog.isVisible();
+
+	HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
+
+	::CheckMenuItem(hMenu, funcItem[MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX]._cmdID, MF_BYCOMMAND | (nxtShow?MF_CHECKED:MF_UNCHECKED));
+
+	clipViewerDialog.ShowDialog(nxtShow);
 }
 
 

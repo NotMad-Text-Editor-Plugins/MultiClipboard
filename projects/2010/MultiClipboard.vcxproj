@@ -203,7 +203,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../src/TinyXML;../../../Common/Ccpp;../../../NativeLang/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../src/TinyXML;../../../Common/Ccpp;../../../NativeLang/src;$(PW);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MultiClipboard_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
@@ -214,8 +214,8 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>legacy_stdio_definitions.lib;shlwapi.lib;comctl32.lib;tinyxml.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(IntDir)MultiClipboard.dll</OutputFile>
+      <AdditionalDependencies>legacy_stdio_definitions.lib;shlwapi.lib;comctl32.lib;tinyxml32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(DLLOU_)</OutputFile>
       <AdditionalLibraryDirectories>../../src/TinyXML;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -376,6 +376,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\ImageListSet\ImageListSet.cpp" />
+    <ClCompile Include="..\..\..\..\PowerEditor\src\wutils.cpp" />
     <ClCompile Include="..\..\..\Common\Ccpp\ToolBar.cpp" />
     <ClCompile Include="..\..\..\Common\Ccpp\URLCtrl.cpp" />
     <ClCompile Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.cpp">
@@ -527,7 +528,6 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClInclude Include="..\..\..\Common\Ccpp\DockingDlgInterface.h" />
     <ClInclude Include="..\..\..\Common\Ccpp\ImageListSet.h" />
     <ClInclude Include="..\..\..\Common\Ccpp\Notepad_plus_msgs.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\Notepad_plus_rc.h" />
     <ClInclude Include="..\..\..\Common\Ccpp\PluginInterface.h" />
     <ClInclude Include="..\..\..\Common\Ccpp\SciSubClassWrp.h" />
     <ClInclude Include="..\..\..\Common\Ccpp\StaticDialog.h" />
@@ -574,6 +574,9 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\MultiClipboard.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\res\paste_muple.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

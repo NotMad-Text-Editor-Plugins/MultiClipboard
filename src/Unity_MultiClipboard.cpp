@@ -67,7 +67,7 @@ in compilation time. Just trying it out. It does get rid of some compile warning
 
 // Notepad++ plugin interface headers
 #include "Scintilla.h"
-#include "Notepad_plus_rc.h"
+#include "../../PowerEditor/src/menuCmdID.h"
 #include "PluginInterface.h"
 
 // NativeLang headers

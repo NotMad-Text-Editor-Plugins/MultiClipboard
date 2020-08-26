@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "MCSubClassWndProc.h"
 #include "SciSubClassWrp.h"
 #include "MultiClipboardProxy.h"
-#include "Notepad_plus_rc.h"
+#include "../../PowerEditor/src/menuCmdID.h"
 #endif
 
 

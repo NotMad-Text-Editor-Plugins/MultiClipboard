@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef MULTI_CLIPBOARD_SETTINGS_H
 #define MULTI_CLIPBOARD_SETTINGS_H
 
+#include "../../PowerEditor/src/wutils.h"
 
 // Settings group and value names
 #define SETTINGS_GROUP_CLIPBOARDLIST		TEXT("ClipboardList")
