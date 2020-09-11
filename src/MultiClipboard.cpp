@@ -19,7 +19,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // include files
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
-#include "stdafx.h"
 
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRA_LEAN
@@ -39,6 +38,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "MultiClipPasteMenu.h"
 #include "MultiClipCyclicPaste.h"
 #include "SelectedTextAutoCopier.h"
+
+#include "wutils.h"
 #endif
 
 
@@ -216,7 +217,7 @@ extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
 			if(legacy)g_TBWndMgr.hToolbarBmp = (HBITMAP)::LoadImage(HRO, MAKEINTRESOURCE(IDB_EX_MULTICLIPBOARD), IMAGE_BITMAP, 0, 0, (LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
 			::SendMessage(g_NppData._nppHandle, NPPM_ADDTOOLBARICON, (WPARAM)funcItem[MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX]._cmdID, (LPARAM)&g_TBWndMgr);
 
-			
+			fetchFontStack(g_NppData._nppHandle);
 		}
 	}
 }

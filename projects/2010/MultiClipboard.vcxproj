@@ -233,8 +233,8 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>../../src/TinyXML;../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../../Common/Ccpp;../../../NativeLang/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MultiClipboard_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>../../src/TinyXML;../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../../CPPCommon;../../../NativeLang/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>TIXMLA_USE_STL;WIN32;NDEBUG;_WINDOWS;_USRDLL;MultiClipboard_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -251,8 +251,11 @@
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
       <ImportLibrary>$(OutDir)MultiClipboard.lib</ImportLibrary>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -375,10 +378,13 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\AboutDlg\URLCtrl.cpp" />
     <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\ImageListSet\ImageListSet.cpp" />
+    <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\StaticDialog\StaticDialog.cpp" />
     <ClCompile Include="..\..\..\..\PowerEditor\src\wutils.cpp" />
-    <ClCompile Include="..\..\..\Common\Ccpp\ToolBar.cpp" />
-    <ClCompile Include="..\..\..\Common\Ccpp\URLCtrl.cpp" />
+    <ClCompile Include="..\..\..\CPPCommon\common_patch.cpp" />
+    <ClCompile Include="..\..\..\CPPCommon\ToolBar.cpp" />
+    <ClCompile Include="..\..\..\CPPCommon\ToolbarPanel.cpp" />
     <ClCompile Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
@@ -403,19 +409,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\StaticDialog.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\stdafx.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\SysMsg.cpp">
+    <ClCompile Include="..\..\..\CPPCommon\SysMsg.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
@@ -446,12 +440,6 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\src\ClipboardControls\SplitterPanel.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ClipboardControls\ToolbarPanel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='ReleaseUnity|Win32'">true</ExcludedFromBuild>
@@ -519,29 +507,27 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\PowerEditor\src\WinControls\ToolBar\ToolBar.h" />
+    <ClInclude Include="..\..\..\CPPCommon\ToolbarPanel.h" />
     <ClInclude Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.h" />
     <ClInclude Include="..\..\src\MCSubClassWndProc.h" />
     <ClInclude Include="..\..\src\MultiClipboardProxy.h" />
     <ClInclude Include="..\..\src\MultiClipboardStringType.h" />
     <ClInclude Include="..\..\src\resource.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\Docking.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\DockingDlgInterface.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\ImageListSet.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\Notepad_plus_msgs.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\PluginInterface.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\SciSubClassWrp.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\StaticDialog.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\stdafx.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\SysMsg.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\ToolBar.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\URLCtrl.h" />
-    <ClInclude Include="..\..\..\Common\Ccpp\Window.h" />
+    <ClInclude Include="..\..\..\CPPCommon\Docking.h" />
+    <ClInclude Include="..\..\..\CPPCommon\DockingDlgInterface.h" />
+    <ClInclude Include="..\..\..\CPPCommon\ImageListSet.h" />
+    <ClInclude Include="..\..\..\CPPCommon\Notepad_plus_msgs.h" />
+    <ClInclude Include="..\..\..\CPPCommon\PluginInterface.h" />
+    <ClInclude Include="..\..\..\CPPCommon\SciSubClassWrp.h" />
+    <ClInclude Include="..\..\..\CPPCommon\SysMsg.h" />
+    <ClInclude Include="..\..\..\CPPCommon\URLCtrl.h" />
+    <ClInclude Include="..\..\..\CPPCommon\Window.h" />
     <ClInclude Include="..\..\src\AboutDlg\AboutDialog.h" />
     <ClInclude Include="..\..\src\ClipboardControls\MultiClipboardContextMenu.h" />
     <ClInclude Include="..\..\src\ClipboardControls\MultiClipboardEditbox.h" />
     <ClInclude Include="..\..\src\ClipboardControls\MultiClipboardListbox.h" />
     <ClInclude Include="..\..\src\ClipboardControls\SplitterPanel.h" />
-    <ClInclude Include="..\..\src\ClipboardControls\ToolbarPanel.h" />
     <ClInclude Include="..\..\src\ClipboardMVC\ClipboardList.h" />
     <ClInclude Include="..\..\src\ClipboardMVC\ModelViewController.h" />
     <ClInclude Include="..\..\src\ClipboardMVC\MultiClipCyclicPaste.h" />

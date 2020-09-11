@@ -159,17 +159,7 @@ INT_PTR CALLBACK MultiClipViewerDialog::run_dlgProc( UINT msg, WPARAM wp, LPARAM
 
 		bool enlarge_text = ::SendMessage(g_NppData._nppHandle, NPPM_GETENLARGETEXT, 0, 0);
 		if(enlarge_text) {
-			//::MessageBox(NULL, TEXT("enlarge_text"), TEXT(""), MB_OK);
-
-			LOGFONT logfont{};
-			//ZeroMemory(&logfont, sizeof(LOGFONT));
-			logfont.lfCharSet = GB2312_CHARSET;
-			//logfont.lfWeight = 550;
-			//HFONT hFont = (HFONT)lParam;
-			//SendMessage(_hSelf,WM_SETFONT,(WPARAM)hFont,0);
-			logfont.lfHeight = -21;
-			auto hFont = CreateFontIndirect(&logfont);
-
+			auto hFont = CreateFontIndirectly(-21, true);
 			setWindowFont(_hSelf, hFont);
 		}
 
@@ -262,7 +252,7 @@ INT_PTR CALLBACK MultiClipViewerDialog::run_dlgProc( UINT msg, WPARAM wp, LPARAM
 					pt.x = lpnm->rc.left;
 					pt.y = lpnm->rc.bottom;
 					ClientToScreen( nmhdr->hwndFrom, &pt );
-					//OnToolBarCommand( ListBoxToolBar.doPopop( pt ) );
+					OnToolBarCommand( ListBoxToolBar.doPopop( pt ) );
 					return TRUE;
 				}
 				break;

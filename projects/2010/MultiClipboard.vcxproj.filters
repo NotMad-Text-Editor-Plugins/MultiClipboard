@@ -7,12 +7,6 @@
     <ClCompile Include="..\..\src\MultiClipboardProxy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\StaticDialog.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\stdafx.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\AboutDlg\AboutDialog.cpp">
       <Filter>Source Files\AboutDlg</Filter>
     </ClCompile>
@@ -26,9 +20,6 @@
       <Filter>Source Files\ClipboardControls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ClipboardControls\SplitterPanel.cpp">
-      <Filter>Source Files\ClipboardControls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\ClipboardControls\ToolbarPanel.cpp">
       <Filter>Source Files\ClipboardControls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ClipboardMVC\ClipboardList.cpp">
@@ -61,7 +52,7 @@
     <ClCompile Include="..\..\src\Unity_MultiClipboard.cpp">
       <Filter>Source Files\Unity</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\SysMsg.cpp">
+    <ClCompile Include="..\..\..\CPPCommon\SysMsg.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\MultiClipboard.cpp">
@@ -70,16 +61,15 @@
     <ClCompile Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.cpp">
       <Filter>Source Files\ClipboardMVC</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\ToolBar.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\ImageListSet\ImageListSet.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Common\Ccpp\URLCtrl.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\PowerEditor\src\wutils.cpp" />
+    <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\AboutDlg\URLCtrl.cpp" />
+    <ClCompile Include="..\..\..\CPPCommon\common_patch.cpp" />
+    <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\StaticDialog\StaticDialog.cpp" />
+    <ClCompile Include="..\..\..\CPPCommon\ToolBar.cpp" />
+    <ClCompile Include="..\..\..\CPPCommon\ToolbarPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\MCSubClassWndProc.h">
@@ -94,40 +84,31 @@
     <ClInclude Include="..\..\src\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\Docking.h">
+    <ClInclude Include="..\..\..\CPPCommon\Docking.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\DockingDlgInterface.h">
+    <ClInclude Include="..\..\..\CPPCommon\DockingDlgInterface.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\ImageListSet.h">
+    <ClInclude Include="..\..\..\CPPCommon\ImageListSet.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\Notepad_plus_msgs.h">
+    <ClInclude Include="..\..\..\CPPCommon\Notepad_plus_msgs.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\PluginInterface.h">
+    <ClInclude Include="..\..\..\CPPCommon\PluginInterface.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\SciSubClassWrp.h">
+    <ClInclude Include="..\..\..\CPPCommon\SciSubClassWrp.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\StaticDialog.h">
+    <ClInclude Include="..\..\..\CPPCommon\SysMsg.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\stdafx.h">
+    <ClInclude Include="..\..\..\CPPCommon\URLCtrl.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\SysMsg.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\ToolBar.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\URLCtrl.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Common\Ccpp\Window.h">
+    <ClInclude Include="..\..\..\CPPCommon\Window.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\AboutDlg\AboutDialog.h">
@@ -143,9 +124,6 @@
       <Filter>Header Files\ClipboardControls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ClipboardControls\SplitterPanel.h">
-      <Filter>Header Files\ClipboardControls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\ClipboardControls\ToolbarPanel.h">
       <Filter>Header Files\ClipboardControls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ClipboardMVC\ClipboardList.h">
@@ -193,6 +171,8 @@
     <ClInclude Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.h">
       <Filter>Header Files\ClipboardMVC</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\PowerEditor\src\WinControls\ToolBar\ToolBar.h" />
+    <ClInclude Include="..\..\..\CPPCommon\ToolbarPanel.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\res\delete.bmp">
