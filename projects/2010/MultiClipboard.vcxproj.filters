@@ -68,8 +68,8 @@
     <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\AboutDlg\URLCtrl.cpp" />
     <ClCompile Include="..\..\..\CPPCommon\common_patch.cpp" />
     <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\StaticDialog\StaticDialog.cpp" />
-    <ClCompile Include="..\..\..\CPPCommon\ToolBar.cpp" />
     <ClCompile Include="..\..\..\CPPCommon\ToolbarPanel.cpp" />
+    <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\ToolBar\ToolBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\MCSubClassWndProc.h">
@@ -165,14 +165,12 @@
     <ClInclude Include="..\..\src\TinyXML\tinyxml.h">
       <Filter>Header Files\TinyXML</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Scintilla.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.h">
       <Filter>Header Files\ClipboardMVC</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\PowerEditor\src\WinControls\ToolBar\ToolBar.h" />
     <ClInclude Include="..\..\..\CPPCommon\ToolbarPanel.h" />
+    <ClInclude Include="..\..\src\Scintilla_plugin.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\res\delete.bmp">

@@ -171,8 +171,8 @@ LRESULT CALLBACK MCSubClassNppWndProc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp
 
 		case IDM_FORMAT_CONV2_AS_UTF_8:
 		case IDM_FORMAT_CONV2_UTF_8:
-		case IDM_FORMAT_CONV2_UCS_2BE: 
-		case IDM_FORMAT_CONV2_UCS_2LE:
+		case IDM_FORMAT_CONV2_UTF_16BE: 
+		case IDM_FORMAT_CONV2_UTF_16LE:
 			// Handle converting Notepad++ text format to UTF/Unicode
 			g_ClipboardProxy.OnNppTextFormatConversion( uniUTF8 );
 			break;

@@ -176,7 +176,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../src/TinyXML;../../../Common/Ccpp;../../../NativeLang/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;MultiClipboard_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;TBPIsWrapper=0;PluginToolbar;TIXMLA_USE_STL;_USRDLL;MultiClipboard_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
@@ -234,7 +234,7 @@
     <ClCompile>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalIncludeDirectories>../../src/TinyXML;../../src;../../src/AboutDlg;../../src/ClipboardMVC;../../src/ClipboardControls;../../src/ClipboardSettings;../../../CPPCommon;../../../NativeLang/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>TIXMLA_USE_STL;WIN32;NDEBUG;_WINDOWS;_USRDLL;MultiClipboard_EXPORTS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WIN64=1;TBPIsWrapper=0;PluginToolbar;TIXMLA_USE_STL;NDEBUG;_WINDOWS;_USRDLL;MarkDownText_EXPORTS;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NON_CONFORMING_SWPRINTFS=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -381,9 +381,9 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\AboutDlg\URLCtrl.cpp" />
     <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\ImageListSet\ImageListSet.cpp" />
     <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\StaticDialog\StaticDialog.cpp" />
+    <ClCompile Include="..\..\..\..\PowerEditor\src\WinControls\ToolBar\ToolBar.cpp" />
     <ClCompile Include="..\..\..\..\PowerEditor\src\wutils.cpp" />
     <ClCompile Include="..\..\..\CPPCommon\common_patch.cpp" />
-    <ClCompile Include="..\..\..\CPPCommon\ToolBar.cpp" />
     <ClCompile Include="..\..\..\CPPCommon\ToolbarPanel.cpp" />
     <ClCompile Include="..\..\src\ClipboardMVC\MultiClipOLEDragDrop.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DebugUnity|Win32'">true</ExcludedFromBuild>
@@ -539,7 +539,7 @@ xcopy ..\..\lang\MultiClipboard_en.ini ..\..\..\Notepad++\plugins\Config\NativeL
     <ClInclude Include="..\..\src\ClipboardSettings\LoonySettingsManager.h" />
     <ClInclude Include="..\..\src\ClipboardSettings\MultiClipboardSettings.h" />
     <ClInclude Include="..\..\src\ClipboardSettings\MultiClipboardSettingsDialog.h" />
-    <ClInclude Include="..\..\src\Scintilla.h" />
+    <ClInclude Include="..\..\src\Scintilla_plugin.h" />
     <ClInclude Include="..\..\src\TinyXML\tinystr.h" />
     <ClInclude Include="..\..\src\TinyXML\tinyxml.h" />
   </ItemGroup>
