@@ -62,8 +62,8 @@ in compilation time. Just trying it out. It does get rid of some compile warning
 // Tiny XML headers
 #include "../TinyXML/tinyxml.h"
 
-// LoonySettingsManager header
-#include "LoonySettingsManager.h"
+// McOptionsManager header
+#include "McOptionsManager.h"
 
 // Notepad++ plugin interface headers
 #include "Scintilla.h"
@@ -102,18 +102,18 @@ in compilation time. Just trying it out. It does get rid of some compile warning
 #include "AboutDialog.h"
 
 // ClipboardSettings headers
-#include "MultiClipboardSettings.h"
+#include "McOptions.h"
 
 // ClipboardControls headers
-#include "MultiClipboardContextMenu.h"
-#include "MultiClipboardEditbox.h"
+#include "CBContextMenu.h"
+#include "CBEditbox.h"
 #include "MultiClipboardListbox.h"
 #include "SplitterPanel.h"
 #include "ToolbarPanel.h"
 
 // ClipboardMVC headers
 #include "ModelViewController.h"
-#include "ClipboardList.h"
+#include "ArraysOfClips.h"
 #include "MultiClipCyclicPaste.h"
 #include "MultiClipOLEDragDrop.h"
 #include "MultiClipPasteMenu.h"
@@ -122,7 +122,7 @@ in compilation time. Just trying it out. It does get rid of some compile warning
 #include "SelectedTextAutoCopier.h"
 
 // ClipboardSettings headers
-#include "MultiClipboardSettingsDialog.h"
+#include "OptionsDlg.h"
 
 #endif	// UNITY_BUILD_SINGLE_INCLUDE
 
@@ -131,8 +131,8 @@ in compilation time. Just trying it out. It does get rid of some compile warning
 #include "AboutDialog.cpp"
 
 // ClipboardControls
-#include "MultiClipboardContextMenu.cpp"
-#include "MultiClipboardEditbox.cpp"
+#include "CBContextMenu.cpp"
+#include "CBEditbox.cpp"
 #include "MultiClipboardListbox.cpp"
 #include "SplitterPanel.cpp"
 #include "ToolbarPanel.cpp"
@@ -148,8 +148,8 @@ in compilation time. Just trying it out. It does get rid of some compile warning
 #include "SelectedTextAutoCopier.cpp"
 
 // ClipboardSettings
-#include "LoonySettingsManager.cpp"
-#include "MultiClipboardSettingsDialog.cpp"
+#include "McOptionsManager.cpp"
+#include "OptionsDlg.cpp"
 
 // Common
 #include "ImageListSet.cpp"

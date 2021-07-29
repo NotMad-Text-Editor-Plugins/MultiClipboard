@@ -6,7 +6,7 @@
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-#pragma code_page(1252)
+#pragma code_page(936)
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -39,40 +39,42 @@ FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
 END
 
-IDD_OPTIONS_DLG DIALOGEX 0, 0, 301, 270
+IDD_OPTIONS_DLG DIALOGEX 0, 0, 301, 284
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "MultiClipboard Options"
 FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,84,249,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,244,249,50,14
-    EDITTEXT        IDC_OPTION_EXPLANATION,7,184,287,51,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | NOT WS_TABSTOP
-    EDITTEXT        IDC_EDIT_MAX_CLIPLIST_SIZE,7,7,16,12,ES_AUTOHSCROLL | ES_NUMBER | NOT WS_BORDER,WS_EX_STATICEDGE
+    DEFPUSHBUTTON   "OK",IDOK,84,263,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,244,263,50,14
+    EDITTEXT        IDC_OPTION_EXPLANATION,7,203,287,51,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | NOT WS_TABSTOP
     CONTROL         "Copy text from other programs",IDC_CHECK_COPY_FROM_OTHER_PROGRAMS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,20,287,12
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,36,287,12
     CONTROL         "But only when pasted into Notepad++",IDC_CHECK_ONLY_WHEN_PASTE_IN_NPP,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,27,35,267,11
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,27,51,267,11
     CONTROL         "Use paste menu (Uncheck: Use cyclic paste)",IDC_CHECK_USE_PASTE_MENU,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,46,287,13
-    LTEXT           "Number of clip texts to store",IDC_TEXT_MAX_CLIPLIST_SIZE,26,8,268,11
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,62,287,13
+    LTEXT           "Number of clip texts to display",IDC_TEXT_MAX_CLIPLIST_SIZE_1,26,23,268,11
     CONTROL         "Use numbered mnemonics in paste menu",IDC_CHECK_NUMBERED_PASTE_MENU,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,27,60,267,11
-    EDITTEXT        IDC_EDIT_PASTE_MENU_WIDTH,18,73,16,12,ES_AUTOHSCROLL | ES_NUMBER | NOT WS_BORDER,WS_EX_STATICEDGE
-    LTEXT           "Width of paste menu",IDC_TEXT_PASTE_MENU_WIDTH,142,75,152,11
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,27,76,267,11
+    EDITTEXT        IDC_EDIT_PASTE_MENU_WIDTH,18,89,16,12,ES_AUTOHSCROLL | ES_NUMBER | NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "Width of paste menu",IDC_TEXT_PASTE_MENU_WIDTH,142,91,152,11
     CONTROL         "Auto copy text selection",IDC_CHECK_AUTO_COPY_SELECTION,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,86,287,14
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,102,287,14
     CONTROL         "Use middle click paste",IDC_CHECK_MIDDLE_CLICK_PASTE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,101,287,13
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,117,287,13
     CONTROL         "Do not copy large text",IDC_CHECK_NO_COPY_LARGE_TEXT,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,114,287,12
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,130,287,12
     CONTROL         "No editing of large text",IDC_CHECK_NO_LARGE_TEXT_EDIT,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,127,287,12
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,143,287,12
     CONTROL         "Paste All: Items in reverse order",IDC_CHECK_PASTE_ALL_REVERSE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,140,287,11
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,156,287,11
     CONTROL         "Paste All: Newline between items",IDC_CHECK_PASTE_ALL_NEWLINE_BETWEEN,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,153,287,13
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,169,287,13
     CONTROL         "Persist clipboard list across sessions",IDC_CHECK_PERSIST_CLIPBOARD_LIST,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,167,287,13
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,183,287,13
+    LTEXT           "Number of clip texts to store",IDC_TEXT_MAX_CLIPLIST_SIZE,26,8,268,11
+    EDITTEXT        IDC_EDIT_MAX_CLIPLIST_SIZE_1,7,22,16,12,ES_AUTOHSCROLL | ES_NUMBER | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_EDIT_MAX_CLIPLIST_SIZE,7,7,16,12,ES_AUTOHSCROLL | ES_NUMBER | NOT WS_BORDER,WS_EX_STATICEDGE
 END
 
 
@@ -100,7 +102,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 294
         TOPMARGIN, 7
-        BOTTOMMARGIN, 263
+        BOTTOMMARGIN, 277
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -132,7 +134,7 @@ BEGIN
             VALUE "FileDescription", "MultiClipboard plugin (unicode) for Notepad++"
             VALUE "FileVersion", "2, 1, 0, 0"
             VALUE "InternalName", "MultiClipboard"
-            VALUE "LegalCopyright", "Copyright � 2011"
+            VALUE "LegalCopyright", "Copyright ??? 2011"
             VALUE "OriginalFilename", "MultiClipboard.dll"
             VALUE "ProductName", "MultiClipboard"
             VALUE "ProductVersion", "2, 1, 0, 0"

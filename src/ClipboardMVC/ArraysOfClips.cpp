@@ -18,9 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
-#include "ClipboardList.h"
+#include "ArraysOfClips.h"
 #include <iterator>
-#include "MultiClipboardSettings.h"
+#include "McOptions.h"
 #endif
 
 
@@ -34,47 +34,48 @@ struct SessionFileHeader
 {
 	unsigned int FileHeaderSize;
 	unsigned int Version;
-	unsigned int NumberClipboardListItem;
+	unsigned int NumberDataOfClip;
 
-	SessionFileHeader( unsigned int inNumberClipboardListItem = 0 )
+	SessionFileHeader( unsigned int inNumberDataOfClip = 0 )
 		: FileHeaderSize( sizeof(SessionFileHeader) )
 		, Version( MULTICLIPBOARD_SESSION_FILE_VERSION )
-		, NumberClipboardListItem( inNumberClipboardListItem )
+		, NumberDataOfClip( inNumberDataOfClip )
 	{}
 };
 
 
-ClipboardListItem::ClipboardListItem()
+DataOfClip::DataOfClip()
 {
 }
 
 
-ClipboardListItem::ClipboardListItem( const TextItem & textItem )
+DataOfClip::DataOfClip( const TextItem & textItem )
 : TextItem( textItem )
 {
 	UpdateColumnText();
 }
 
 
-bool ClipboardListItem::operator==( const TextItem & rhs ) const
+bool DataOfClip::operator==( const TextItem & rhs ) const
 {
 	return text == rhs.text && textMode == rhs.textMode;
 }
 
 
-void ClipboardListItem::UpdateColumnText()
+void DataOfClip::UpdateColumnText()
 {
 	MakeColumnText( columnText );
 }
 
 
-ClipboardList::ClipboardList()
-: MaxListSize( 10 )
+ArraysOfClips::ArraysOfClips()
+: MaxListSize( 20 )
+, MaxDisplaySize( 10 )
 , bSaveClipboardSession( false )
 {
 }
 
-bool ClipboardList::AddText( const TextItem & textItem )
+bool ArraysOfClips::AddText( const TextItem & textItem )
 {
 	if ( IsTextAvailable( textItem.text ) )
 	{
@@ -82,7 +83,7 @@ bool ClipboardList::AddText( const TextItem & textItem )
 		return false;
 	}
 
-	ClipboardListItem clipboardItem( textItem );
+	DataOfClip clipboardItem( textItem );
 	textList.push_front( clipboardItem );
 
 	// Check if max list size is exceeded
@@ -97,7 +98,7 @@ bool ClipboardList::AddText( const TextItem & textItem )
 }
 
 
-void ClipboardList::RemoveText( const unsigned int index )
+void ArraysOfClips::RemoveText( const unsigned int index )
 {
 	TextListIterator iter = GetIterAtIndex( index );
 	if ( iter == textList.end() )
@@ -109,14 +110,14 @@ void ClipboardList::RemoveText( const unsigned int index )
 }
 
 
-void ClipboardList::RemoveAllTexts()
+void ArraysOfClips::RemoveAllTexts()
 {
 	textList.clear();
 	OnModified();
 }
 
 
-const ClipboardListItem & ClipboardList::GetText( const unsigned int index )
+const DataOfClip & ArraysOfClips::GetText( const unsigned int index )
 {
 	TextListIterator iter = GetIterAtIndex( index );
 	if ( iter == textList.end() )
@@ -128,7 +129,7 @@ const ClipboardListItem & ClipboardList::GetText( const unsigned int index )
 }
 
 
-const ClipboardListItem & ClipboardList::PasteText( const unsigned int index )
+const DataOfClip & ArraysOfClips::PasteText( const unsigned int index )
 {
 	TextListIterator iter = GetIterAtIndex( index );
 	if ( iter == textList.end() )
@@ -145,7 +146,7 @@ const ClipboardListItem & ClipboardList::PasteText( const unsigned int index )
 }
 
 
-bool ClipboardList::EditText( const int index, const std::wstring & newText )
+bool ArraysOfClips::EditText( const int index, const std::wstring & newText )
 {
 	TextListIterator iter = GetIterAtIndex( index );
 	if ( iter == textList.end() )
@@ -160,7 +161,7 @@ bool ClipboardList::EditText( const int index, const std::wstring & newText )
 }
 
 
-bool ClipboardList::ModifyTextItem( const TextItem & fromTextItem, const TextItem & toTextItem )
+bool ArraysOfClips::ModifyTextItem( const TextItem & fromTextItem, const TextItem & toTextItem )
 {
 	TextListIterator iter;
 	for ( iter = textList.begin(); iter != textList.end(); ++iter )
@@ -177,7 +178,7 @@ bool ClipboardList::ModifyTextItem( const TextItem & fromTextItem, const TextIte
 }
 
 
-void ClipboardList::SetTextNewIndex( const unsigned int index, const unsigned int newIndex )
+void ArraysOfClips::SetTextNewIndex( const unsigned int index, const unsigned int newIndex )
 {
 	if ( index    < 0 || index    >= GetNumText() ||
 		 newIndex < 0 || newIndex >= GetNumText() ||
@@ -202,7 +203,7 @@ void ClipboardList::SetTextNewIndex( const unsigned int index, const unsigned in
 }
 
 
-bool ClipboardList::IsTextAvailable( const std::wstring & text ) const
+bool ArraysOfClips::IsTextAvailable( const std::wstring & text ) const
 {
 	ConstTextListIterator iter;
 	for ( iter = textList.begin(); iter != textList.end(); ++iter )
@@ -216,7 +217,7 @@ bool ClipboardList::IsTextAvailable( const std::wstring & text ) const
 }
 
 
-int ClipboardList::GetTextItemIndex( const TextItem & text ) const
+int ArraysOfClips::GetTextItemIndex( const TextItem & text ) const
 {
 	int textIndex = 0;
 	ConstTextListIterator iter;
@@ -231,13 +232,18 @@ int ClipboardList::GetTextItemIndex( const TextItem & text ) const
 }
 
 
-unsigned int ClipboardList::GetNumText() const
+unsigned int ArraysOfClips::GetNumText() const
 {
 	return (unsigned int)textList.size();
 }
 
+unsigned int ArraysOfClips::GetNumDisplay() const
+{
+	return min(textList.size(), MaxDisplaySize);
+}
 
-void ClipboardList::SetMaxListSize( const int NewSize )
+
+void ArraysOfClips::SetMaxListSize( const int NewSize )
 {
 	if ( NewSize <= 0 )
 	{
@@ -261,7 +267,7 @@ void ClipboardList::SetMaxListSize( const int NewSize )
 }
 
 
-void ClipboardList::SaveClipboardSession()
+void ArraysOfClips::SaveClipboardSession()
 {
 	if ( bSaveClipboardSession )
 	{
@@ -293,7 +299,7 @@ void ClipboardList::SaveClipboardSession()
 }
 
 
-void ClipboardList::LoadClipboardSession()
+void ArraysOfClips::LoadClipboardSession()
 {
 	if ( bSaveClipboardSession )
 	{
@@ -308,7 +314,7 @@ void ClipboardList::LoadClipboardSession()
 			DWORD BytesRead = 0;
 			::ReadFile( hSessionFile, &header, header.FileHeaderSize, &BytesRead, NULL );
 
-			for ( unsigned int textIndex = 0; textIndex < header.NumberClipboardListItem; ++textIndex )
+			for ( unsigned int textIndex = 0; textIndex < header.NumberDataOfClip; ++textIndex )
 			{
 				unsigned int textSize = 0;
 				unsigned int textMode = 0;
@@ -330,7 +336,7 @@ void ClipboardList::LoadClipboardSession()
 }
 
 
-ClipboardList::TextListType::iterator ClipboardList::GetIterAtIndex( const unsigned int index )
+ArraysOfClips::TextListType::iterator ArraysOfClips::GetIterAtIndex( const unsigned int index )
 {
 	if ( index >= GetNumText() )
 	{
@@ -343,17 +349,18 @@ ClipboardList::TextListType::iterator ClipboardList::GetIterAtIndex( const unsig
 }
 
 
-void ClipboardList::OnObserverAdded( LoonySettingsManager * SettingsManager )
+void ArraysOfClips::OnObserverAdded( McOptionsManager * SettingsManager )
 {
 	SettingsObserver::OnObserverAdded( SettingsManager );
 
 	// Add default settings if it doesn't exists
 	SET_SETTINGS_INT( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_MAX_CLIPBOARD_ITEMS, MaxListSize )
+	SET_SETTINGS_INT( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_MAX_DISPLAY_ITEMS, MaxDisplaySize )
 	SET_SETTINGS_BOOL( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_SAVE_CLIPBOARD_SESSION, bSaveClipboardSession )
 }
 
 
-void ClipboardList::OnSettingsChanged( const stringType & GroupName, const stringType & SettingName )
+void ArraysOfClips::OnSettingsChanged( const stringType & GroupName, const stringType & SettingName )
 {
 	if ( GroupName != SETTINGS_GROUP_CLIPBOARDLIST )
 	{
@@ -362,6 +369,7 @@ void ClipboardList::OnSettingsChanged( const stringType & GroupName, const strin
 
 	int NewMaxClipboardItems = 0;
 	IF_SETTING_CHANGED_INT( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_MAX_CLIPBOARD_ITEMS, NewMaxClipboardItems )
+	IF_SETTING_CHANGED_INT( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_MAX_DISPLAY_ITEMS, MaxDisplaySize )
 	else IF_SETTING_CHANGED_BOOL( SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_SAVE_CLIPBOARD_SESSION, bSaveClipboardSession )
 	if ( NewMaxClipboardItems > 0 )
 	{

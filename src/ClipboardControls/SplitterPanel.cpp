@@ -19,6 +19,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "SplitterPanel.h"
+#include "InsituDebug.h"
+#include "NppDarkMode.h"
 #include <windowsx.h>
 #include <commctrl.h>
 #include "resource.h"
@@ -178,15 +180,19 @@ void SplitterPanel::ResizeChildren()
 {
 	if ( pChildWin1 )
 	{
-		RECT ChildWin1Rect;
-		GetPanel1Rect( ChildWin1Rect );
-		pChildWin1->reSizeToWH( ChildWin1Rect );
+		RECT rect;
+		GetPanel1Rect( rect );
+		rect.right = rect.right - rect.left;
+		rect.bottom = rect.bottom - rect.top;
+		pChildWin1->reSizeTo( rect );
 	}
 	if ( pChildWin2 )
 	{
-		RECT ChildWin2Rect;
-		GetPanel2Rect( ChildWin2Rect );
-		pChildWin2->reSizeToWH( ChildWin2Rect );
+		RECT rect;
+		GetPanel2Rect( rect );
+		rect.right = rect.right - rect.left;
+		rect.bottom = rect.bottom - rect.top;
+		pChildWin2->reSizeTo( rect );
 	}
 }
 
@@ -242,7 +248,7 @@ LRESULT SplitterPanel::SplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam
 
 	switch ( message )
 	{
-	case WM_MOUSEMOVE:
+		case WM_MOUSEMOVE:
 		{
 			POINT MousePos;
 			MousePos.x = GET_X_LPARAM( lParam );
@@ -279,7 +285,7 @@ LRESULT SplitterPanel::SplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam
 			return 0;
 		}
 
-	case WM_LBUTTONDOWN:
+		case WM_LBUTTONDOWN:
 		{
 			RECT SplitterBarRect;
 			GetSplitterBarRect( SplitterBarRect );
@@ -294,10 +300,9 @@ LRESULT SplitterPanel::SplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam
 				InvalidateRect( _hSelf, 0, TRUE );
 				return 0;
 			}
-		}
-		break;
+		} break;
 
-	case WM_LBUTTONUP:
+		case WM_LBUTTONUP:
 		{
 			if ( IsDraggingSplitter )
 			{
@@ -306,16 +311,35 @@ LRESULT SplitterPanel::SplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam
 				InvalidateRect( _hSelf, 0, TRUE );
 				return 0;
 			}
-		}
-		break;
+		} break;
 
-	case WM_MOVE:
-	case WM_SIZE:
-		ResizeChildren();
-		return 0;
-
-	case WM_PAINT:
+		case WM_ERASEBKGND:
 		{
+			if (!NppDarkMode::isEnabled())
+			{
+				break;
+			}
+
+			RECT rc = { 0 };
+			getClientRect(rc);
+
+			FillRect((HDC)wParam, &rc, NppDarkMode::getSofterBackgroundBrush());
+
+			return 1;
+		}
+
+		case WM_MOVE:
+		case WM_SIZE:
+			ResizeChildren();
+			return 0;
+
+		case WM_PAINT:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				break;
+			}
+
 			HDC hdc;
 			PAINTSTRUCT ps;
 			RECT SplitterBarRect;
@@ -339,16 +363,16 @@ LRESULT SplitterPanel::SplitterPanelProc( HWND hwnd, UINT message, WPARAM wParam
 			return 0;
 		}
 
-	case WM_COMMAND:
-	case WM_NOTIFY:
-		// Being a container window which doesn't care about child window control notifications,
-		// forward the child window controls' notifications to the parent window for processing
-		return ::SendMessage( _hParent, message, wParam, lParam );
+		case WM_COMMAND:
+		case WM_NOTIFY:
+			// Being a container window which doesn't care about child window control notifications,
+			// forward the child window controls' notifications to the parent window for processing
+			return ::SendMessage( _hParent, message, wParam, lParam );
 
-	case WM_DESTROY:
-		::DeleteBrush( hSplitterBrush );
-		::DeletePen( hSplitterPen );
-		return 0;
+		case WM_DESTROY:
+			::DeleteBrush( hSplitterBrush );
+			::DeletePen( hSplitterPen );
+			return 0;
 	}
 	return ::DefWindowProc( hwnd, message, wParam, lParam );
 }

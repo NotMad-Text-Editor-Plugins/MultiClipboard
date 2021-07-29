@@ -19,9 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "MultiClipPasteMenu.h"
-#include "ClipboardList.h"
+#include "ArraysOfClips.h"
 #include "MultiClipboardProxy.h"
-#include "MultiClipboardSettings.h"
+#include "McOptions.h"
 #include <sstream>
 #endif
 
@@ -45,7 +45,7 @@ MultiClipPasteMenu::MultiClipPasteMenu()
 }
 
 
-void MultiClipPasteMenu::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
+void MultiClipPasteMenu::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings )
 {
 	IController::Init( pNewModel, pClipboardProxy, pSettings );
 	pClipboardProxy->AddMouseListener( this );
@@ -53,9 +53,9 @@ void MultiClipPasteMenu::Init( IModel * pNewModel, MultiClipboardProxy * pClipbo
 }
 
 
-void MultiClipPasteMenu::ShowPasteMenu()
+void MultiClipPasteMenu::show()
 {
-	ClipboardList * pClipboardList = (ClipboardList*)GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips*)GetModel();
 	if ( !pClipboardList || pClipboardList->GetNumText() <= 0 )
 	{
 		return;
@@ -87,8 +87,9 @@ void MultiClipPasteMenu::OnModelModified()
 
 void MultiClipPasteMenu::RecreateCopyMenu()
 {
-	ClipboardList * pClipboardList = (ClipboardList*)GetModel();
-	if ( !pClipboardList || pClipboardList->GetNumText() <= 0 )
+	ArraysOfClips * pList = (ArraysOfClips*)GetModel();
+	int len = pList->GetNumDisplay();
+	if ( !pList || len <= 0 )
 	{
 		return;
 	}
@@ -108,11 +109,11 @@ void MultiClipPasteMenu::RecreateCopyMenu()
 	std::wstring MenuText;
 
 	// Loop through the list and append every one as a menu item
-	for ( unsigned int index = 0; index < pClipboardList->GetNumText(); ++index )
+	for ( unsigned int index = 0; index < len; ++index )
 	{
 		// Create a menu ID based on the its location in the list
 		unsigned int menuId = MULTI_COPY_MENU_CMD + index;
-		CreateMenuText( pClipboardList->GetText( index ).text, MenuText, index );
+		CreateMenuText( pList->GetText( index ).text, MenuText, index );
 		BOOL result = AppendMenu( hPasteMenu, MF_STRING, menuId, MenuText.c_str() );
 		if ( !result )
 		{
@@ -188,7 +189,7 @@ void MultiClipPasteMenu::CreateMenuText( const std::wstring & InClipText, std::w
 
 void MultiClipPasteMenu::PasteClipboardItem( unsigned int MenuItemID )
 {
-	ClipboardList * pClipboardList = (ClipboardList*)GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips*)GetModel();
 	if ( !pClipboardList || pClipboardList->GetNumText() <= 0 )
 	{
 		return;
@@ -233,7 +234,7 @@ BOOL MultiClipPasteMenu::OnMiddleClick( bool bIsShift )
 
 	if ( bIsShift )
 	{
-		ShowPasteMenu();
+		show();
 	}
 	else
 	{
@@ -244,7 +245,7 @@ BOOL MultiClipPasteMenu::OnMiddleClick( bool bIsShift )
 }
 
 
-void MultiClipPasteMenu::OnObserverAdded( LoonySettingsManager * SettingsManager )
+void MultiClipPasteMenu::OnObserverAdded( McOptionsManager * SettingsManager )
 {
 	SettingsObserver::OnObserverAdded( SettingsManager );
 

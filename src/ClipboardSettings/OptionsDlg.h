@@ -27,13 +27,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 
-class MultiClipboardSettingsDialog : public StaticDialog
+class OptionsDlg : public StaticDialog
 {
 public:
 	void Init( HINSTANCE hInst, HWND hNpp );
 	void ShowDialog( bool Show = TRUE );
 	virtual void create(int dialogID, bool isRTL = false, bool msgDestParent = true) {
         StaticDialog::create(dialogID, isRTL, msgDestParent);
+		run_dlgProc( NPPN_DARKCONF_CHANGED, 0, 0);
     };
 
 	void destroy() {

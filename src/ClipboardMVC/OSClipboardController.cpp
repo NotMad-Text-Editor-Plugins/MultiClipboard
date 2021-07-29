@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "OSClipboardController.h"
-#include "ClipboardList.h"
-#include "MultiClipboardSettings.h"
+#include "ArraysOfClips.h"
+#include "McOptions.h"
 #endif
 
 extern MultiClipboardProxy	g_ClipboardProxy;
@@ -35,7 +35,7 @@ OSClipboardController::OSClipboardController()
 }
 
 
-void OSClipboardController::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
+void OSClipboardController::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings )
 {
 	IController::Init( pNewModel, pClipboardProxy, pSettings );
 	pClipboardProxy->RegisterClipboardListener( this );
@@ -59,7 +59,7 @@ void OSClipboardController::OnNewClipboardText( const TextItem & textItem )
 
 	if ( isNppForeground || !bOnlyWhenPastedInNpp  )
 	{
-		ClipboardList * pClipboardList = (ClipboardList *)GetModel();
+		ArraysOfClips * pClipboardList = (ArraysOfClips *)GetModel();
 		if ( !pClipboardList )
 		{
 			return;
@@ -79,7 +79,7 @@ void OSClipboardController::OnTextPasted()
 		return;
 	}
 
-	ClipboardList * pClipboardList = (ClipboardList *)GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips *)GetModel();
 	if ( !pClipboardList )
 	{
 		return;
@@ -96,7 +96,7 @@ void OSClipboardController::OnTextPasted()
 }
 
 
-void OSClipboardController::OnObserverAdded( LoonySettingsManager * SettingsManager )
+void OSClipboardController::OnObserverAdded( McOptionsManager * SettingsManager )
 {
 	SettingsObserver::OnObserverAdded( SettingsManager );
 

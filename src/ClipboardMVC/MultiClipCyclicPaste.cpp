@@ -19,9 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "MultiClipCyclicPaste.h"
-#include "ClipboardList.h"
+#include "ArraysOfClips.h"
 #include "MultiClipboardProxy.h"
-#include "MultiClipboardSettings.h"
+#include "McOptions.h"
 #endif
 
 
@@ -36,7 +36,7 @@ MultiClipCyclicPaste::MultiClipCyclicPaste()
 }
 
 
-void MultiClipCyclicPaste::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
+void MultiClipCyclicPaste::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings )
 {
 	IController::Init( pNewModel, pClipboardProxy, pSettings );
 	pClipboardProxy->AddCyclicPasteListener( this );
@@ -45,7 +45,7 @@ void MultiClipCyclicPaste::Init( IModel * pNewModel, MultiClipboardProxy * pClip
 
 void MultiClipCyclicPaste::DoCyclicPaste()
 {
-	ClipboardList * pClipboardList = (ClipboardList*)GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips*)GetModel();
 	if ( !pClipboardList || pClipboardList->GetNumText() <= 0 )
 	{
 		return;
@@ -66,7 +66,7 @@ void MultiClipCyclicPaste::DoCyclicPaste()
 	}
 
 	// paste text into current selection pos
-	const ClipboardListItem & itemToPaste = pClipboardList->GetText( nextPasteIndex );
+	const DataOfClip & itemToPaste = pClipboardList->GetText( nextPasteIndex );
 	g_ClipboardProxy.ReplaceSelectionText( itemToPaste );
 
 	// Select this newly pasted text
@@ -109,7 +109,7 @@ void MultiClipCyclicPaste::OnCyclicPasteEnd()
 	int currPasteIndex = nextPasteIndex - 1;
 	ResetPasteIndex();
 
-	ClipboardList * pClipboardList = (ClipboardList*)GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips*)GetModel();
 	if ( !pClipboardList || pClipboardList->GetNumText() <= 0 )
 	{
 		return;
@@ -131,7 +131,7 @@ void MultiClipCyclicPaste::OnModelModified()
 }
 
 
-void MultiClipCyclicPaste::OnObserverAdded( LoonySettingsManager * SettingsManager )
+void MultiClipCyclicPaste::OnObserverAdded( McOptionsManager * SettingsManager )
 {
 	SettingsObserver::OnObserverAdded( SettingsManager );
 }

@@ -31,7 +31,7 @@ class SelectedTextAutoCopier : public IController, public ClipboardListener, pub
 {
 public:
 	SelectedTextAutoCopier();
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings );
 
 	bool IsSelectionOverlapping( const int CurrSelStart, const int CurrSelEnd );
 
@@ -46,7 +46,7 @@ public:
 	virtual void OnCyclicPasteBegin();
 	virtual void OnCyclicPasteEnd();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+	virtual void OnObserverAdded( McOptionsManager * SettingsManager );
 	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 
 private:

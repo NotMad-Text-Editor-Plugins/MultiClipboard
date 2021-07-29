@@ -16,40 +16,41 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-/*
-Note: Most of the code below is taken from
-"Writing your own menu-like window" by Raymond Chen
-http://blogs.msdn.com/oldnewthing/archive/2004/08/20/217684.aspx
-Direct download of the code is from "FakeMenu.zip"
-http://www.mvps.org/user32/rc/FakeMenu.zip
-*/
 
-
-#ifndef MULTI_CLIPBOARD_CONTEXT_MENU_H
-#define MULTI_CLIPBOARD_CONTEXT_MENU_H
+#ifndef MULTI_CLIPBOARD_LIST_BOX_H
+#define MULTI_CLIPBOARD_LIST_BOX_H
 
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
-#include "Window.h"
+#include "ToolbarPanel.h"
 #include <string>
 #endif
 
 
-class MultiClipboardContextMenu : public Window
+// Notification to parent that delete key is pressed
+#define LBN_DELETEITEM LB_MSGMAX+0x100
+
+
+class CBListPanel : public ToolbarPanel
 {
 public:
-	virtual void init( HINSTANCE hInst, HWND parent );
+	virtual void init(HINSTANCE hInst, HWND parent);
 	virtual void destroy();
-	virtual void ShowContextMenu( int x, int y );
 
 	virtual void AddItem( std::wstring item );
+	virtual void ClearAll();
+	virtual INT GetItemCount();
 
-private:
-	HFONT hNewFont;
+	virtual INT GetCurrentSelectionIndex();
+	// Selects the specified list box item.
+	// If index out of bounds, and bStrictSelect is TRUE, nothing is selected
+	// else the last item in the list, if available, is selected
+	virtual void SetCurrentSelectedItem( INT NewSelectionIndex, BOOL bStrictSelect=TRUE );
 
-	LRESULT CALLBACK ContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+	int _lbBgColor;
+	int _lbFgColor;
 
-	static LRESULT CALLBACK StaticContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+	LRESULT runProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam ) override;
 };
 
 

@@ -30,7 +30,7 @@ class MultiClipCyclicPaste : public IController, public CyclicPasteListener
 {
 public:
 	MultiClipCyclicPaste();
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings );
 
 	void DoCyclicPaste();
 	void ResetPasteIndex();
@@ -41,7 +41,7 @@ public:
 
 	virtual void OnModelModified();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+	virtual void OnObserverAdded( McOptionsManager * SettingsManager );
 	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 
 private:

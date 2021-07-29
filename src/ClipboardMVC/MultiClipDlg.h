@@ -26,8 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "SplitterPanel.h"
 #include "ToolbarPanel.h"
 #include "ToolBar.h"
-#include "MultiClipboardListbox.h"
-#include "MultiClipboardEditbox.h"
+#include "CBListbox.h"
+#include "CBEditbox.h"
 #include "MultiClipOLEDragDrop.h"
 #endif
 
@@ -41,7 +41,7 @@ public:
 	MultiClipViewerDialog();
 	~MultiClipViewerDialog();
 	// Not inherited from DockingDlgInterface
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings );
 	virtual void Shutdown();
 	// Inherited from DockingDlgInterface
 	virtual void destroy() {}
@@ -50,6 +50,7 @@ public:
 
 	virtual void OnModelModified();
 
+	void refreshDarkMode();
 protected:
 	// Overload DockingDlgInterface's dialog procedure
 	virtual INT_PTR CALLBACK run_dlgProc( UINT msg, WPARAM wp, LPARAM lp );
@@ -73,12 +74,12 @@ private:
 	BOOL bPasteAllReverseOrder;
 	BOOL bPasteAllEOLBetweenItems;
 
-	SplitterPanel MultiClipViewerPanel;
-	ToolbarPanel ListBoxPanel;
-	ToolbarPanel EditBoxPanel;
-	ToolBar ListBoxToolBar;
-	MultiClipboardListbox MultiClipViewerListbox;
-	MultiClipboardEditbox MultiClipViewerEditBox;
+	SplitterPanel _cbViewer;
+	ToolbarPanel _cbListP;
+	ToolbarPanel _cbEditP;
+	ToolBar _cbToolbar;
+	CBListbox _cbList;
+	CBEditbox _cbEdit;
 
 	void ShowClipText();
 	void OnListSelectionChanged();
@@ -95,7 +96,7 @@ private:
 	void DeleteAllItems();
 	void CopySelectedItemToClipboard();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+	virtual void OnObserverAdded( McOptionsManager * SettingsManager );
 	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 };
 

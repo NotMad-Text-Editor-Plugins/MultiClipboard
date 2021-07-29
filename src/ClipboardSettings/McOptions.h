@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Settings group and value names
 #define SETTINGS_GROUP_CLIPBOARDLIST		TEXT("ClipboardList")
 #define SETTINGS_MAX_CLIPBOARD_ITEMS		TEXT("MaxClipboardItems")
+#define SETTINGS_MAX_DISPLAY_ITEMS			TEXT("MaxDisplayItems")
 #define SETTINGS_SAVE_CLIPBOARD_SESSION		TEXT("SaveClipboardSession")
 
 #define SETTINGS_GROUP_OSCLIPBOARD			TEXT("OSClipboard")

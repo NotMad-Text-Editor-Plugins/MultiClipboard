@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include <vector>
-#include "LoonySettingsManager.h"
+#include "McOptionsManager.h"
 #endif
 
 
@@ -57,7 +57,7 @@ class IController : public SettingsObserver
 {
 public:
 	IController() : pModel( 0 ) {}
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
+	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings )
 	{
 		pNewModel->AddController( this );
 		pSettings->AddSettingsObserver( this );

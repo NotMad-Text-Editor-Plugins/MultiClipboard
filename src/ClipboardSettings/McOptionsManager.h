@@ -1,5 +1,5 @@
 /*
-This file is part of LoonySettingsManager project
+This file is part of McOptionsManager project
 Copyright (C) 2009 LoonyChewy
 http://www.peepor.net/loonchew/index.php?p=loonylib
 
@@ -73,11 +73,11 @@ class SettingsObserver;
 typedef std::list< SettingsObserver * > SettingsObserversListType;
 typedef SettingsObserversListType::iterator SettingsObserversIterator;
 
-class LoonySettingsManager
+class McOptionsManager
 {
 public:
-	LoonySettingsManager( TCHAR * RootName, TCHAR * Version = TEXT("1.0") );
-	virtual ~LoonySettingsManager();
+	McOptionsManager( TCHAR * RootName, TCHAR * Version = TEXT("1.0") );
+	virtual ~McOptionsManager();
 	virtual bool LoadSettings( TCHAR * FilePath );
 	virtual void SaveSettings( TCHAR * FilePath );
 	virtual void LoadDefaultSettings();
@@ -143,11 +143,11 @@ class SettingsObserver
 {
 public:
 	SettingsObserver();
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+	virtual void OnObserverAdded( McOptionsManager * SettingsManager );
 	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 
 protected:
-	LoonySettingsManager * pSettingsManager;
+	McOptionsManager * pSettingsManager;
 };
 
 

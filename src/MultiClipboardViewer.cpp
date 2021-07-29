@@ -22,19 +22,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #define WIN32_LEAN_AND_MEAN
 #define VC_EXTRA_LEAN
-#include "PluginInterface.h"
+#include "PluginDefinition.h"
 
 #include "SciSubClassWrp.h"
 #include "MCSubClassWndProc.h"
 #include "MultiClipboardProxy.h"
-#include "LoonySettingsManager.h"
-#include "MultiClipboardSettingsDialog.h"
+#include "McOptionsManager.h"
+#include "OptionsDlg.h"
 #include "AboutDialog.h"
 #include "NativeLang_def.h"
 
-#include "ClipboardList.h"
+#include "ArraysOfClips.h"
 #include "OSClipboardController.h"
-#include "MultiClipViewerDialog.h"
+#include "MultiClipDlg.h"
 #include "MultiClipPasteMenu.h"
 #include "MultiClipCyclicPaste.h"
 #include "SelectedTextAutoCopier.h"
@@ -43,23 +43,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 
+HWND mainAppWnd;
+
 // information for notepad++
-CONST INT	nbFunc	= 4;
 CONST TCHAR	PLUGIN_NAME[] = TEXT("&MultiClipboard");
 
 // global values
-HINSTANCE			g_hInstance = NULL;
-NppData				g_NppData;
 MultiClipboardProxy	g_ClipboardProxy;
-LoonySettingsManager g_SettingsManager( TEXT("MultiClipboardSettings") );
-FuncItem			funcItem[nbFunc];
+McOptionsManager g_SettingsManager( TEXT("McOptions") );
 toolbarIcons		g_TBWndMgr{0,0,0x666,0,IDR_MULTICLIPBOARD_ICO,0,0,IDB_EX_MULTICLIPBOARD};
 SciSubClassWrp		g_ScintillaMain, g_ScintillaSecond;
-WNDPROC				g_NppWndProc;
 
 // dialog classes
-AboutDialog			AboutDlg;
-MultiClipboardSettingsDialog OptionsDlg;
+AboutDialog			_aboutDlg;
+OptionsDlg _optDlg;
 
 // settings
 
@@ -69,11 +66,11 @@ TCHAR configPath[MAX_PATH];
 TCHAR SettingsFilePath[MAX_PATH];
 
 // MVC components for plugin
-ClipboardList clipboardList;
+ArraysOfClips clipboardList;
 OSClipboardController OSClipboard;
-MultiClipViewerDialog clipViewerDialog;
-MultiClipPasteMenu clipPasteMenu;
-MultiClipCyclicPaste cyclicPaste;
+MultiClipViewerDialog _mcViewer;
+MultiClipPasteMenu _pasteMenu;
+MultiClipCyclicPaste _cyclicPaste;
 SelectedTextAutoCopier autoCopier;
 
 // Function prototypes for this plugin
@@ -100,31 +97,7 @@ BOOL APIENTRY DllMain( HINSTANCE hModule,
 	{
 		case DLL_PROCESS_ATTACH:
 		{
-			// Set function pointers
-			funcItem[0]._pFunc = ToggleView;
-			funcItem[1]._pFunc = ShowClipPasteMenu;
-			funcItem[2]._pFunc = ShowOptionsDlg;
-			funcItem[3]._pFunc = ShowAboutDlg;
-
-			// Fill menu names
-			lstrcpy( funcItem[0]._itemName, TEXT("&MultiClip Viewer...") );
-			lstrcpy( funcItem[1]._itemName, TEXT("MultiClipboard &Paste") );
-			lstrcpy( funcItem[2]._itemName, TEXT("&Options...") );
-			lstrcpy( funcItem[3]._itemName, TEXT("&About...") );
-
-			// Set shortcuts
-			funcItem[0]._pShKey = new ShortcutKey;
-			funcItem[0]._pShKey->_isAlt		= true;
-			funcItem[0]._pShKey->_isCtrl	= true;
-			funcItem[0]._pShKey->_isShift	= false;
-			funcItem[0]._pShKey->_key		= 'V';
-			funcItem[1]._pShKey = new ShortcutKey;
-			funcItem[1]._pShKey->_isAlt		= false;
-			funcItem[1]._pShKey->_isCtrl	= true;
-			funcItem[1]._pShKey->_isShift	= true;
-			funcItem[1]._pShKey->_key		= 'V';
-			funcItem[2]._pShKey = NULL;
-			funcItem[3]._pShKey = NULL;
+			_mcViewer.init((HINSTANCE)hModule, NULL);
 			break;
 		}
 		case DLL_PROCESS_DETACH:
@@ -168,17 +141,48 @@ extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 	LoadSettings();
 
 	// initial dialogs
-	AboutDlg.Init( g_hInstance, g_NppData );
-	OptionsDlg.Init( g_hInstance, g_NppData._nppHandle );
+	_aboutDlg.Init( g_hInstance, g_NppData );
+	_optDlg.Init( g_hInstance, mainAppWnd=g_NppData._nppHandle );
 
 	// Initialisation of MVC components
 	g_SettingsManager.AddSettingsObserver( &clipboardList );
 	clipboardList.LoadClipboardSession();
 	OSClipboard.Init( &clipboardList, &g_ClipboardProxy, &g_SettingsManager );
-	clipViewerDialog.Init( &clipboardList, &g_ClipboardProxy, &g_SettingsManager );
-	clipPasteMenu.Init( &clipboardList, &g_ClipboardProxy, &g_SettingsManager );
-	cyclicPaste.Init( &clipboardList, &g_ClipboardProxy, &g_SettingsManager );
+
+	_mcViewer.Init( &clipboardList, &g_ClipboardProxy, &g_SettingsManager );
+
+	_pasteMenu.Init( &clipboardList, &g_ClipboardProxy, &g_SettingsManager );
+	_cyclicPaste.Init( &clipboardList, &g_ClipboardProxy, &g_SettingsManager );
 	autoCopier.Init( &clipboardList, &g_ClipboardProxy, &g_SettingsManager );
+
+
+	// Set function pointers
+	funcItem[0]._pFunc = ToggleView;
+	funcItem[1]._pFunc = ShowClipPasteMenu;
+	funcItem[2]._pFunc = ShowOptionsDlg;
+	funcItem[3]._pFunc = ShowAboutDlg;
+
+	// Fill menu names
+	lstrcpy( funcItem[0]._itemName, TEXT("&MultiClip Viewer...") );
+	lstrcpy( funcItem[1]._itemName, TEXT("MultiClipboard &Paste") );
+	lstrcpy( funcItem[2]._itemName, TEXT("&Options...") );
+	lstrcpy( funcItem[3]._itemName, TEXT("&About...") );
+
+	// Set shortcuts
+	funcItem[0]._pShKey = new ShortcutKey;
+	funcItem[0]._pShKey->_isAlt		= true;
+	funcItem[0]._pShKey->_isCtrl	= true;
+	funcItem[0]._pShKey->_isShift	= false;
+	funcItem[0]._pShKey->_key		= 'V';
+	funcItem[1]._pShKey = new ShortcutKey;
+	funcItem[1]._pShKey->_isAlt		= false;
+	funcItem[1]._pShKey->_isCtrl	= true;
+	funcItem[1]._pShKey->_isShift	= true;
+	funcItem[1]._pShKey->_key		= 'V';
+	funcItem[2]._pShKey = NULL;
+	funcItem[3]._pShKey = NULL;
+
+
 }
 
 extern "C" __declspec(dllexport) const TCHAR * getName()
@@ -197,28 +201,80 @@ extern "C" __declspec(dllexport) FuncItem * getFuncsArray(INT *nbF)
  *
  *	This function is called, if a notification in Scantilla/Notepad++ occurs
  */
+bool deferredUpdateRequested = false;
+bool NPPRunning = false;
+int EditorBG;
+void refreshDarkModeIfEditorBgChanged()
+{
+	int editorBg = SendMessage(nppData._nppHandle, NPPM_GETEDITORDEFAULTBACKGROUNDCOLOR, 0, 0);
+	if (EditorBG!=editorBg)
+	{
+		_mcViewer.refreshDarkMode();
+		EditorBG = editorBg;
+	}
+}
+
 extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
 {
-	if (notifyCode->nmhdr.hwndFrom == g_NppData._nppHandle)
-	{
-		// Change menu language
-		NLChangeNppMenu( (HINSTANCE)g_hInstance, g_NppData._nppHandle, (LPTSTR)PLUGIN_NAME, funcItem, nbFunc );
 
-		// On this notification code you can register your plugin icon in Notepad++ toolbar
-		if (notifyCode->nmhdr.code == NPPN_TBMODIFICATION)
-		{		
+	int code = notifyCode->nmhdr.code;
+	//int NeedUpdate=0;
+	switch (code) 
+	{
+		case NPPN_TBMODIFICATION:
+		if (notifyCode->nmhdr.hwndFrom == g_NppData._nppHandle)
+		{
 			auto HRO = (HINSTANCE)g_hInstance;
 
 			long version = ::SendMessage(g_NppData._nppHandle, NPPM_GETNOTMADVERSION, 0, 0);
 
-			bool legacy = version<0x666;
+			legacy = version<0x666;
 
 			g_TBWndMgr.HRO = HRO;
-			if(legacy)g_TBWndMgr.hToolbarBmp = (HBITMAP)::LoadImage(HRO, MAKEINTRESOURCE(IDB_EX_MULTICLIPBOARD), IMAGE_BITMAP, 0, 0, (LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
+			if(legacy) {
+				g_TBWndMgr.hToolbarBmp = (HBITMAP)::LoadImage(HRO, MAKEINTRESOURCE(IDB_EX_MULTICLIPBOARD), IMAGE_BITMAP, 0, 0, (LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
+				g_TBWndMgr.hToolbarIcon = (HICON)::LoadIcon(HRO, MAKEINTRESOURCE(IDR_MULTICLIPBOARD_ICO));
+			}
 			::SendMessage(g_NppData._nppHandle, NPPM_ADDTOOLBARICON, (WPARAM)funcItem[MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX]._cmdID, (LPARAM)&g_TBWndMgr);
 
 			fetchFontStack(g_NppData._nppHandle);
+
+			// Change menu language
+			NLChangeNppMenu( (HINSTANCE)g_hInstance, g_NppData._nppHandle, (LPTSTR)PLUGIN_NAME, funcItem, nbFunc );
+		}  break;
+
+		case SCN_UPDATEUI:
+		{
+			//static int paint_cc = 0; LogIs("SCN_UPDATEUI %d %d ", paint_cc++, notifyCode->updated);
+			if (legacy && 9==notifyCode->updated) // SC_UPDATE_CONTENT
+			{
+				refreshDarkModeIfEditorBgChanged();
+			}
 		}
+		break;
+
+		case NPPN_READY:
+		{
+			NPPRunning=true;
+		}
+		break;
+
+		case NPPN_SHUTDOWN:
+		{
+			NPPRunning=0;
+		}
+		break;
+
+		// 切换黑暗模式
+		case NPPN_DARKCONF_CHANGED:
+		{
+			//LogIs(2, "NPPN_DARKCONF_CHANGED");
+			if(NPPRunning)
+			{
+				_mcViewer.refreshDarkMode();
+			}
+		}
+		break;
 	}
 }
 
@@ -281,7 +337,7 @@ void SaveSettings(void)
 
 void ShutDownPlugin()
 {
-	clipViewerDialog.Shutdown();
+	_mcViewer.Shutdown();
 	g_ClipboardProxy.Destroy();
 	// Shutdown COM for OLE drag drop
 	OleUninitialize();
@@ -292,39 +348,40 @@ void ShutDownPlugin()
  */
 void ToggleView(void)
 {
+	//LogIs(2, "ToggleView");
 	// get menu and test if dockable dialog is open
 	bool nxtShow = 1;
 
-	nxtShow = !clipViewerDialog.isVisible();
+	nxtShow = !_mcViewer.isVisible();
 
 	HMENU hMenu = ::GetMenu(g_NppData._nppHandle);
 
 	::CheckMenuItem(hMenu, funcItem[MULTICLIPBOARD_DOCKABLE_WINDOW_INDEX]._cmdID, MF_BYCOMMAND | (nxtShow?MF_CHECKED:MF_UNCHECKED));
 
-	clipViewerDialog.ShowDialog(nxtShow);
+	_mcViewer.ShowDialog(nxtShow);
 }
 
 
 void ShowAboutDlg(void)
 {
-	AboutDlg.doDialog();
+	_aboutDlg.doDialog();
 }
 
 
 void ShowOptionsDlg()
 {
-	OptionsDlg.ShowDialog();
+	_optDlg.ShowDialog();
 }
 
 
 void ShowClipPasteMenu()
 {
-	if ( clipPasteMenu.IsUsePasteMenu() )
+	if ( _pasteMenu.isEnabled() )
 	{
-		clipPasteMenu.ShowPasteMenu();
+		_pasteMenu.show();
 	}
 	else
 	{
-		cyclicPaste.DoCyclicPaste();
+		_cyclicPaste.DoCyclicPaste();
 	}
 }

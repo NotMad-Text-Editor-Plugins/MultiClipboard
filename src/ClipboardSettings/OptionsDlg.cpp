@@ -18,10 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
-#include "MultiClipboardSettingsDialog.h"
-#include "LoonySettingsManager.h"
-#include "MultiClipboardSettings.h"
-#include "PluginInterface.h"
+#include "OptionsDlg.h"
+#include "McOptionsManager.h"
+#include "McOptions.h"
+#include "NppDarkMode.h"
 #include "NativeLang_def.h"
 #include "resource.h"
 #include <windowsx.h>
@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #endif
 
 extern HINSTANCE g_hInstance;
-extern LoonySettingsManager g_SettingsManager;
+extern McOptionsManager g_SettingsManager;
 extern NppData				g_NppData;
 #define NM_MOUSE_OVER_CONTROL 1000
 
@@ -70,14 +70,14 @@ LRESULT CALLBACK StaticTextChildCtrlDlgDlgProc( HWND hwnd, UINT msg, WPARAM wPar
 }
 
 
-void MultiClipboardSettingsDialog::Init( HINSTANCE hInst, HWND hNpp )
+void OptionsDlg::Init( HINSTANCE hInst, HWND hNpp )
 {
 	Window::init( hInst, hNpp );
 	CurrentMouseOverID = 0;
 }
 
 
-void MultiClipboardSettingsDialog::ShowDialog( bool Show )
+void OptionsDlg::ShowDialog( bool Show )
 {
 	if ( !isCreated() )
 	{
@@ -94,100 +94,159 @@ void MultiClipboardSettingsDialog::ShowDialog( bool Show )
 
 }
 
-INT_PTR CALLBACK MultiClipboardSettingsDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK OptionsDlg::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch ( message )
 	{
-	case WM_INITDIALOG:
-	{
-		// Change language
-		bool enlarge_text = ::SendMessage(g_NppData._nppHandle, NPPM_GETENLARGETEXT, 0, 0);
-		if(enlarge_text) {
-			//::MessageBox(NULL, TEXT("enlarge_text"), TEXT(""), MB_OK);
+		case WM_INITDIALOG:
+		{
+			// Change language
+			bool enlarge_text = ::SendMessage(g_NppData._nppHandle, NPPM_GETENLARGETEXT, 0, 0);
+			if(enlarge_text) {
+				//::MessageBox(NULL, TEXT("enlarge_text"), TEXT(""), MB_OK);
 
-			LOGFONT logfont{};
-			//ZeroMemory(&logfont, sizeof(LOGFONT));
-			logfont.lfCharSet = GB2312_CHARSET;
-			//logfont.lfWeight = 550;
-			//HFONT hFont = (HFONT)lParam;
-			//SendMessage(_hSelf,WM_SETFONT,(WPARAM)hFont,0);
-			logfont.lfHeight = -21;
-			auto hFont = CreateFontIndirect(&logfont);
+				LOGFONT logfont{};
+				//ZeroMemory(&logfont, sizeof(LOGFONT));
+				logfont.lfCharSet = GB2312_CHARSET;
+				//logfont.lfWeight = 550;
+				//HFONT hFont = (HFONT)lParam;
+				//SendMessage(_hSelf,WM_SETFONT,(WPARAM)hFont,0);
+				logfont.lfHeight = -21;
+				auto hFont = CreateFontIndirect(&logfont);
 
-			setWindowFont(_hSelf, hFont);
+				setWindowFont(_hSelf, hFont);
+			}
+
+			NLChangeDialog( _hInst, g_NppData._nppHandle, _hSelf, TEXT("Options") );
+
+			return TRUE;
 		}
 
-		NLChangeDialog( _hInst, g_NppData._nppHandle, _hSelf, TEXT("Options") );
-
-		return TRUE;
-	}
-
-	case WM_COMMAND:
-		if ( ( HIWORD(wParam) == NM_MOUSE_OVER_CONTROL ) && ( LOWORD(wParam) != 0 ) )
+		case WM_COMMAND:
 		{
-			if ( CurrentMouseOverID != LOWORD(wParam) )
+			if ( ( HIWORD(wParam) == NM_MOUSE_OVER_CONTROL ) && ( LOWORD(wParam) != 0 ) )
 			{
-				CurrentMouseOverID = LOWORD(wParam);
+				if ( CurrentMouseOverID != LOWORD(wParam) )
+				{
+					CurrentMouseOverID = LOWORD(wParam);
+					DisplayMouseOverIDHelp( CurrentMouseOverID );
+				}
+				break;
+			}
+
+			switch ( wParam )
+			{
+			case IDOK:
+				SaveMultiClipboardSettings();
+				// fall through
+			case IDCANCEL:
+				display(FALSE);
+				return TRUE;
+
+			default :
+				break;
+			}
+		}
+
+
+		case WM_MOUSEMOVE:
+			if ( CurrentMouseOverID != 0 )
+			{
+				CurrentMouseOverID = 0;
 				DisplayMouseOverIDHelp( CurrentMouseOverID );
+			}
+			break;
+
+		case WM_CTLCOLOREDIT:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColorSofter(reinterpret_cast<HDC>(wParam));
 			}
 			break;
 		}
 
-		switch ( wParam )
+		case WM_CTLCOLORLISTBOX:
 		{
-		case IDOK:
-			SaveMultiClipboardSettings();
-			// fall through
-		case IDCANCEL:
-			display(FALSE);
-			return TRUE;
-
-		default :
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColor(reinterpret_cast<HDC>(wParam));
+			}
 			break;
 		}
 
-
-	case WM_MOUSEMOVE:
-		if ( CurrentMouseOverID != 0 )
+		case WM_CTLCOLORDLG:
+		case WM_CTLCOLORSTATIC:
 		{
-			CurrentMouseOverID = 0;
-			DisplayMouseOverIDHelp( CurrentMouseOverID );
+			if (NppDarkMode::isEnabled())
+			{
+				return NppDarkMode::onCtlColorDarker(reinterpret_cast<HDC>(wParam));
+			}
+			break;
 		}
-		break;
+
+		case WM_PRINTCLIENT:
+		{
+			if (NppDarkMode::isEnabled())
+			{
+				return TRUE;
+			}
+			break;
+		}
+
+		case NPPN_DARKCONF_CHANGED:
+		{
+			NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+			NppDarkMode::setDarkScrollBar(_hSelf);
+			return TRUE;
+		}
+
+		case WM_ERASEBKGND:
+		{
+			if (!NppDarkMode::isEnabled())
+			{
+				break;
+			}
+
+			RECT rc = { 0 };
+			getClientRect(rc);
+			FillRect((HDC)wParam, &rc, NppDarkMode::getBackgroundBrush());
+			return 1;
+		}
 	}
 	return FALSE;
 }
 
 
-void MultiClipboardSettingsDialog::SetIntValueToDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID )
+void OptionsDlg::SetIntValueToDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID )
 {
 	int intValue = g_SettingsManager.GetIntSetting( GroupName, SettingName );
 	::SetDlgItemInt( _hSelf, DlgItemID, intValue, FALSE );
 }
 
 
-void MultiClipboardSettingsDialog::SetBoolValueToDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID )
+void OptionsDlg::SetBoolValueToDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID )
 {
 	bool boolValue = g_SettingsManager.GetBoolSetting( GroupName, SettingName );
 	::CheckDlgButton( _hSelf, DlgItemID, boolValue ? BST_CHECKED : BST_UNCHECKED );
 }
 
 
-void MultiClipboardSettingsDialog::GetIntValueFromDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID )
+void OptionsDlg::GetIntValueFromDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID )
 {
 	int intValue = ::GetDlgItemInt( _hSelf, DlgItemID, NULL, FALSE );
 	g_SettingsManager.SetIntSetting( GroupName, SettingName, intValue );
 }
 
 
-void MultiClipboardSettingsDialog::GetBoolValueFromDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID )
+void OptionsDlg::GetBoolValueFromDialog( const std::wstring & GroupName, const std::wstring & SettingName, const int DlgItemID )
 {
 	bool boolValue = BST_CHECKED == ::IsDlgButtonChecked( _hSelf, DlgItemID );
 	g_SettingsManager.SetBoolSetting( GroupName, SettingName, boolValue );
 }
 
 
-void MultiClipboardSettingsDialog::LoadMultiClipboardSettings()
+void OptionsDlg::LoadMultiClipboardSettings()
 {
 	for ( unsigned int i = 0; i < SettingsControlMap.size(); ++i )
 	{
@@ -208,7 +267,7 @@ void MultiClipboardSettingsDialog::LoadMultiClipboardSettings()
 }
 
 
-void MultiClipboardSettingsDialog::SaveMultiClipboardSettings()
+void OptionsDlg::SaveMultiClipboardSettings()
 {
 	for ( unsigned int i = 0; i < SettingsControlMap.size(); ++i )
 	{
@@ -230,7 +289,7 @@ void MultiClipboardSettingsDialog::SaveMultiClipboardSettings()
 
 int MupleCBlastHelp=0;
 
-void MultiClipboardSettingsDialog::DisplayMouseOverIDHelp( int ControlID )
+void OptionsDlg::DisplayMouseOverIDHelp( int ControlID )
 {
 	if ( ControlID == 0 || MupleCBlastHelp==ControlID)
 	{
@@ -253,15 +312,18 @@ void MultiClipboardSettingsDialog::DisplayMouseOverIDHelp( int ControlID )
 }
 
 
-void MultiClipboardSettingsDialog::SubclassChildControl( const int ControlID )
+void OptionsDlg::SubclassChildControl( const int ControlID )
 {
 	HWND hChild = GetDlgItem( _hSelf, ControlID );
 	WNDPROC ChildWndProc = (WNDPROC) SetWindowLongPtr( hChild, GWLP_WNDPROC, (LONG_PTR) MCBSettingsChildCtrlDlgProc );
+	
+	
 	::SetWindowLongPtr( hChild, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(ChildWndProc) );
+
 }
 
 
-void MultiClipboardSettingsDialog::SubclassStaticTextChildControl( const int ControlID )
+void OptionsDlg::SubclassStaticTextChildControl( const int ControlID )
 {
 	HWND hChild = GetDlgItem( _hSelf, ControlID );
 	WNDPROC ChildWndProc = (WNDPROC) SetWindowLongPtr( hChild, GWLP_WNDPROC, (LONG_PTR) StaticTextChildCtrlDlgDlgProc );
@@ -269,7 +331,7 @@ void MultiClipboardSettingsDialog::SubclassStaticTextChildControl( const int Con
 }
 
 
-void MultiClipboardSettingsDialog::SubclassAllChildControls()
+void OptionsDlg::SubclassAllChildControls()
 {
 	for ( unsigned int i = 0; i < SettingsControlMap.size(); ++i )
 	{
@@ -282,7 +344,7 @@ void MultiClipboardSettingsDialog::SubclassAllChildControls()
 }
 
 
-void MultiClipboardSettingsDialog::GetSettingsGroupAndName( const int Control, std::wstring & GroupName, std::wstring & SettingName )
+void OptionsDlg::GetSettingsGroupAndName( const int Control, std::wstring & GroupName, std::wstring & SettingName )
 {
 	for ( unsigned int i = 0; i < SettingsControlMap.size(); ++i )
 	{
@@ -296,7 +358,7 @@ void MultiClipboardSettingsDialog::GetSettingsGroupAndName( const int Control, s
 }
 
 
-LPCTSTR MultiClipboardSettingsDialog::GetControlHelpText( int ControlID )
+LPCTSTR OptionsDlg::GetControlHelpText( int ControlID )
 {
 	for ( unsigned int i = 0; i < SettingsControlMap.size(); ++i )
 	{
@@ -311,70 +373,75 @@ LPCTSTR MultiClipboardSettingsDialog::GetControlHelpText( int ControlID )
 
 
 // All settings to be defined here, and the rest of the functions will take care of the rest
-void MultiClipboardSettingsDialog::LoadSettingsControlMap()
+void OptionsDlg::LoadSettingsControlMap()
 {
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_EDIT_MAX_CLIPLIST_SIZE, IDC_TEXT_MAX_CLIPLIST_SIZE, SCTE_INT,
 		SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_MAX_CLIPBOARD_ITEMS,
-		TEXT("Maximum number of text to be stored in clipboard buffer") ) );
+		TEXT("剪贴板“存储”的最大条目数量") ) );
+	
+	SettingsControlMap.push_back( SettingsControlMapStruct(
+		IDC_EDIT_MAX_CLIPLIST_SIZE_1, IDC_TEXT_MAX_CLIPLIST_SIZE_1, SCTE_INT,
+		SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_MAX_DISPLAY_ITEMS,
+		TEXT("上下文菜单“显示”的最大条目数量") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_COPY_FROM_OTHER_PROGRAMS, SCTE_BOOL,
 		SETTINGS_GROUP_OSCLIPBOARD, SETTINGS_COPY_FROM_OTHER_PROGRAMS,
-		TEXT("Get text that are copied from other programs") ) );
+		TEXT("获得来自其他应用程序的剪贴数据") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_ONLY_WHEN_PASTE_IN_NPP, SCTE_BOOL,
 		SETTINGS_GROUP_OSCLIPBOARD, SETTINGS_ONLY_WHEN_PASTED_IN_NPP,
-		TEXT("When 'Copy text from other programs' is true, then text is only copied when it is immediately pasted into Notepad++") ) );
+		TEXT("仅在粘贴到图创文本时，才触发“获得来自其他应用程序的剪贴数据”这一操作 ") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_USE_PASTE_MENU, SCTE_BOOL,
 		SETTINGS_GROUP_PASTE_MENU, SETTINGS_USE_PASTE_MENU,
-		TEXT("Use paste menu instead of cyclic paste when Ctrl-Shift-V") ) );
+		TEXT("用Ctrl-Shift-V粘贴时，显示上下文菜单，而不是直接粘贴然后轮番切换。") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_NUMBERED_PASTE_MENU, SCTE_BOOL,
 		SETTINGS_GROUP_PASTE_MENU, SETTINGS_SHOW_NUMBERED_PASTE_MENU,
-		TEXT("Use numbers as shortcut keys for selecting menu items instead of the first character of the text") ) );
+		TEXT("上下文菜单显示数字而用非首字母作为加速键") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_EDIT_PASTE_MENU_WIDTH, IDC_TEXT_PASTE_MENU_WIDTH, SCTE_INT,
 		SETTINGS_GROUP_PASTE_MENU, SETTINGS_PASTE_MENU_WIDTH,
-		TEXT("Maximum number of characters to display per text on the paste menu") ) );
+		TEXT("显示宽度") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_MIDDLE_CLICK_PASTE, SCTE_BOOL,
 		SETTINGS_GROUP_PASTE_MENU, SETTINGS_MIDDLE_CLICK_PASTE,
-		TEXT("Click middle mouse button to paste text from clipboard. Shift-middle click will show paste menu") ) );
+		TEXT("点击鼠标中键进行粘贴. 按住Shift显示上下文菜单") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_AUTO_COPY_SELECTION, SCTE_BOOL,
 		SETTINGS_GROUP_AUTO_COPY, SETTINGS_AUTO_COPY_TEXT_SELECTION,
-		TEXT("Automatically copies selected text into clipboard") ) );
+		TEXT("自动复制选中的文本") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_NO_COPY_LARGE_TEXT, SCTE_BOOL,
 		SETTINGS_GROUP_OSCLIPBOARD, SETTINGS_IGNORE_LARGE_TEXT,
-		TEXT("Do not store large text into MultiClipboard plugin. Improves performance when copy and pasting very large text") ) );
+		TEXT("略过非常大的文本，较少内存占用。Improves performance when copy and pasting very large text") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_NO_LARGE_TEXT_EDIT, SCTE_BOOL,
 		SETTINGS_GROUP_MULTI_CLIP_VIEWER, SETTINGS_NO_EDIT_LARGE_TEXT,
-		TEXT("Do not allow editing of large text in MultiClip Viewer. Improves performance when using the MultiClip Viewer") ) );
+		TEXT("禁止编辑大文本。 Improves performance when using the MultiClip Viewer") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_PASTE_ALL_REVERSE, SCTE_BOOL,
 		SETTINGS_GROUP_MULTI_CLIP_VIEWER, SETTINGS_PASTE_ALL_REVERSE,
-		TEXT("When pasting all items, paste them in reverse order of the clipboard list") ) );
+		TEXT("粘贴全部：使用逆序") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_PASTE_ALL_NEWLINE_BETWEEN, SCTE_BOOL,
 		SETTINGS_GROUP_MULTI_CLIP_VIEWER, SETTINGS_PASTE_ALL_NEWLINE_BETWEEN,
-		TEXT("When pasting all items, append a newline between each item") ) );
+		TEXT("粘贴全部：每行隔开") ) );
 
 	SettingsControlMap.push_back( SettingsControlMapStruct(
 		IDC_CHECK_PERSIST_CLIPBOARD_LIST, SCTE_BOOL,
 		SETTINGS_GROUP_CLIPBOARDLIST, SETTINGS_SAVE_CLIPBOARD_SESSION,
-		TEXT("Persist the clipboard list across Notepad++ sessions") ) );
+		TEXT("存储到会话。（WIP）Persist the clipboard list across Editor sessions") ) );
 }

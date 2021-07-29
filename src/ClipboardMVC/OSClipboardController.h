@@ -31,13 +31,13 @@ class OSClipboardController : public IController, public ClipboardListener
 {
 public:
 	OSClipboardController();
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings );
 
 	// ClipboardListener interface
 	void OnNewClipboardText( const TextItem & textItem );
 	void OnTextPasted();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+	virtual void OnObserverAdded( McOptionsManager * SettingsManager );
 	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 
 private:

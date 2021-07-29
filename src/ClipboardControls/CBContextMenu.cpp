@@ -25,13 +25,13 @@ http://www.mvps.org/user32/rc/FakeMenu.zip
 */
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
-#include "MultiClipboardContextMenu.h"
+#include "CBContextMenu.h"
 #endif
 
 #define CONTEXT_MENU_CLASS_NAME TEXT( "ToolbarPanel" )
 
 
-void MultiClipboardContextMenu::init( HINSTANCE hInst, HWND parent )
+void CBContextMenu::init( HINSTANCE hInst, HWND parent )
 {
 	hNewFont = 0;
 
@@ -58,7 +58,7 @@ void MultiClipboardContextMenu::init( HINSTANCE hInst, HWND parent )
 		}
 	}
 
-	_hSelf = CreateWindow( TEXT("MultiClipboardContextMenu"), NULL,
+	_hSelf = CreateWindow( TEXT("CBContextMenu"), NULL,
 		WS_CHILD | WS_VISIBLE | WS_BORDER ,
 		0, 0, 1, 1, parent, 0, hInst, NULL );
 
@@ -83,31 +83,31 @@ void MultiClipboardContextMenu::init( HINSTANCE hInst, HWND parent )
 }
 
 
-void MultiClipboardContextMenu::destroy()
+void CBContextMenu::destroy()
 {
 	::DeleteObject( hNewFont );
 }
 
 
-void MultiClipboardContextMenu::ShowContextMenu( int x, int y )
+void CBContextMenu::ShowContextMenu( int x, int y )
 {
 }
 
 
-void MultiClipboardContextMenu::AddItem( std::wstring item )
+void CBContextMenu::AddItem( std::wstring item )
 {
 }
 
 
-LRESULT CALLBACK MultiClipboardContextMenu::ContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK CBContextMenu::ContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
 	return ::DefWindowProc( hwnd, message, wParam, lParam );
 }
 
 
-LRESULT CALLBACK MultiClipboardContextMenu::StaticContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK CBContextMenu::StaticContextMenuProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-	MultiClipboardContextMenu * pContextMenu = reinterpret_cast<MultiClipboardContextMenu *>( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
+	CBContextMenu * pContextMenu = reinterpret_cast<CBContextMenu *>( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
 	if ( !pContextMenu )
 	{
 		return ::DefWindowProc( hwnd, message, wParam, lParam );

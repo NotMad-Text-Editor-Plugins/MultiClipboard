@@ -1,5 +1,5 @@
 /*
-This file is part of LoonySettingsManager project
+This file is part of McOptionsManager project
 Copyright (C) 2009 LoonyChewy
 http://www.peepor.net/loonchew/index.php?p=loonylib
 
@@ -8,7 +8,7 @@ For details, see http://creativecommons.org/licenses/publicdomain/
 */
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
-#include "LoonySettingsManager.h"
+#include "McOptionsManager.h" // LnooySettingsManager
 #include "../TinyXML/tinyxml.h"
 #include <vector>
 #include <algorithm>
@@ -54,7 +54,7 @@ void ConvertCharToWChar( const char * pInStr, stringType & OutStr )
 }
 
 
-LoonySettingsManager::LoonySettingsManager( TCHAR * RootName, TCHAR * Version )
+McOptionsManager::McOptionsManager( TCHAR * RootName, TCHAR * Version )
 : RootElementName( RootName )
 , VersionString( Version )
 {
@@ -62,7 +62,7 @@ LoonySettingsManager::LoonySettingsManager( TCHAR * RootName, TCHAR * Version )
 }
 
 
-LoonySettingsManager::~LoonySettingsManager()
+McOptionsManager::~McOptionsManager()
 {
 	for ( SettingsType::iterator i1 = Settings.begin(); i1 != Settings.end(); ++i1 )
 	{
@@ -78,7 +78,7 @@ LoonySettingsManager::~LoonySettingsManager()
 }
 
 
-bool LoonySettingsManager::LoadSettings( TCHAR * FilePath )
+bool McOptionsManager::LoadSettings( TCHAR * FilePath )
 {
 	std::vector< char > tempBuffer(128);
 	ConvertWCharToChar( FilePath, tempBuffer );
@@ -181,7 +181,7 @@ bool LoonySettingsManager::LoadSettings( TCHAR * FilePath )
 }
 
 
-void LoonySettingsManager::SaveSettings( TCHAR * FilePath )
+void McOptionsManager::SaveSettings( TCHAR * FilePath )
 {
 	std::vector< char > tempBuffer(128);
 	TiXmlDocument SettingsDoc;
@@ -269,19 +269,19 @@ void LoonySettingsManager::SaveSettings( TCHAR * FilePath )
 }
 
 
-void LoonySettingsManager::LoadDefaultSettings()
+void McOptionsManager::LoadDefaultSettings()
 {
 	// Child classes can override this
 }
 
 
-bool LoonySettingsManager::IsSettingExists( const stringType & GroupName, const stringType & SettingName )
+bool McOptionsManager::IsSettingExists( const stringType & GroupName, const stringType & SettingName )
 {
 	return 0 != GetSetting( GroupName, SettingName );
 }
 
 
-bool LoonySettingsManager::GetBoolSetting( const stringType & GroupName, const stringType & SettingName )
+bool McOptionsManager::GetBoolSetting( const stringType & GroupName, const stringType & SettingName )
 {
 	SettingValue * Value = GetSetting( GroupName, SettingName );
 	if ( Value == 0 || Value->Type != SVT_BOOL )
@@ -292,7 +292,7 @@ bool LoonySettingsManager::GetBoolSetting( const stringType & GroupName, const s
 }
 
 
-int LoonySettingsManager::GetIntSetting( const stringType & GroupName, const stringType & SettingName )
+int McOptionsManager::GetIntSetting( const stringType & GroupName, const stringType & SettingName )
 {
 	SettingValue * Value = GetSetting( GroupName, SettingName );
 	if ( Value == 0 || Value->Type != SVT_INT )
@@ -303,7 +303,7 @@ int LoonySettingsManager::GetIntSetting( const stringType & GroupName, const str
 }
 
 
-float LoonySettingsManager::GetFloatSetting( const stringType & GroupName, const stringType & SettingName )
+float McOptionsManager::GetFloatSetting( const stringType & GroupName, const stringType & SettingName )
 {
 	SettingValue * Value = GetSetting( GroupName, SettingName );
 	if ( Value == 0 || Value->Type != SVT_FLOAT )
@@ -314,7 +314,7 @@ float LoonySettingsManager::GetFloatSetting( const stringType & GroupName, const
 }
 
 
-stringType LoonySettingsManager::GetStringSetting( const stringType & GroupName, const stringType & SettingName )
+stringType McOptionsManager::GetStringSetting( const stringType & GroupName, const stringType & SettingName )
 {
 	SettingValue * Value = GetSetting( GroupName, SettingName );
 	if ( Value == 0 || Value->Type != SVT_STRING )
@@ -325,7 +325,7 @@ stringType LoonySettingsManager::GetStringSetting( const stringType & GroupName,
 }
 
 
-void LoonySettingsManager::SetBoolSetting( const stringType & GroupName, const stringType & SettingName, const bool Value )
+void McOptionsManager::SetBoolSetting( const stringType & GroupName, const stringType & SettingName, const bool Value )
 {
 	SettingValue * ValueToSet = GetSetting( GroupName, SettingName );
 	if ( ValueToSet == 0 )
@@ -344,7 +344,7 @@ void LoonySettingsManager::SetBoolSetting( const stringType & GroupName, const s
 }
 
 
-void LoonySettingsManager::SetIntSetting( const stringType & GroupName, const stringType & SettingName, const int Value )
+void McOptionsManager::SetIntSetting( const stringType & GroupName, const stringType & SettingName, const int Value )
 {
 	SettingValue * ValueToSet = GetSetting( GroupName, SettingName );
 	if ( ValueToSet == 0 )
@@ -363,7 +363,7 @@ void LoonySettingsManager::SetIntSetting( const stringType & GroupName, const st
 }
 
 
-void LoonySettingsManager::SetFloatSetting( const stringType & GroupName, const stringType & SettingName, const float Value )
+void McOptionsManager::SetFloatSetting( const stringType & GroupName, const stringType & SettingName, const float Value )
 {
 	SettingValue * ValueToSet = GetSetting( GroupName, SettingName );
 	if ( ValueToSet == 0 )
@@ -382,7 +382,7 @@ void LoonySettingsManager::SetFloatSetting( const stringType & GroupName, const 
 }
 
 
-void LoonySettingsManager::SetStringSetting( const stringType & GroupName, const stringType & SettingName, const stringType & Value )
+void McOptionsManager::SetStringSetting( const stringType & GroupName, const stringType & SettingName, const stringType & Value )
 {
 	SettingValue * ValueToSet = GetSetting( GroupName, SettingName );
 	if ( ValueToSet == 0 )
@@ -401,21 +401,21 @@ void LoonySettingsManager::SetStringSetting( const stringType & GroupName, const
 }
 
 
-bool LoonySettingsManager::FirstSettingsGroup()
+bool McOptionsManager::FirstSettingsGroup()
 {
 	CurrentSettingsGroupIter = Settings.begin();
 	return CurrentSettingsGroupIter != Settings.end();
 }
 
 
-bool LoonySettingsManager::NextSettingsGroup()
+bool McOptionsManager::NextSettingsGroup()
 {
 	++CurrentSettingsGroupIter;
 	return CurrentSettingsGroupIter != Settings.end();
 }
 
 
-stringType LoonySettingsManager::GetCurrentSettingsGroupName()
+stringType McOptionsManager::GetCurrentSettingsGroupName()
 {
 	if ( CurrentSettingsGroupIter == Settings.end() )
 	{
@@ -425,7 +425,7 @@ stringType LoonySettingsManager::GetCurrentSettingsGroupName()
 }
 
 
-bool LoonySettingsManager::FirstSettingValue()
+bool McOptionsManager::FirstSettingValue()
 {
 	if ( CurrentSettingsGroupIter == Settings.end() )
 	{
@@ -436,7 +436,7 @@ bool LoonySettingsManager::FirstSettingValue()
 }
 
 
-bool LoonySettingsManager::NextSettingValue()
+bool McOptionsManager::NextSettingValue()
 {
 	if ( CurrentSettingsGroupIter == Settings.end() )
 	{
@@ -447,7 +447,7 @@ bool LoonySettingsManager::NextSettingValue()
 }
 
 
-stringType LoonySettingsManager::GetCurrentSettingValueName()
+stringType McOptionsManager::GetCurrentSettingValueName()
 {
 	if ( CurrentSettingsGroupIter == Settings.end() )
 	{
@@ -461,7 +461,7 @@ stringType LoonySettingsManager::GetCurrentSettingValueName()
 }
 
 
-const SettingValue * LoonySettingsManager::GetCurrentSettingValue()
+const SettingValue * McOptionsManager::GetCurrentSettingValue()
 {
 	if ( CurrentSettingsGroupIter == Settings.end() )
 	{
@@ -475,7 +475,7 @@ const SettingValue * LoonySettingsManager::GetCurrentSettingValue()
 }
 
 
-SettingValue * LoonySettingsManager::GetSetting( const stringType & GroupName, const stringType & SettingName )
+SettingValue * McOptionsManager::GetSetting( const stringType & GroupName, const stringType & SettingName )
 {
 	SettingsType::iterator GroupIter = Settings.find( GroupName );
 	if ( GroupIter == Settings.end() )
@@ -493,7 +493,7 @@ SettingValue * LoonySettingsManager::GetSetting( const stringType & GroupName, c
 }
 
 
-SettingValue * LoonySettingsManager::AddNewSetting( const stringType & GroupName, const stringType & SettingName )
+SettingValue * McOptionsManager::AddNewSetting( const stringType & GroupName, const stringType & SettingName )
 {
 	typedef std::pair< stringType, SettingsGroupType *  > SettingsGroupPair;
 	typedef std::pair< stringType, SettingValue * > SettingValuePair;
@@ -517,7 +517,7 @@ SettingValue * LoonySettingsManager::AddNewSetting( const stringType & GroupName
 }
 
 
-void LoonySettingsManager::AddSettingsObserver( SettingsObserver * pObserver )
+void McOptionsManager::AddSettingsObserver( SettingsObserver * pObserver )
 {
 	if ( !pObserver )
 	{
@@ -528,7 +528,7 @@ void LoonySettingsManager::AddSettingsObserver( SettingsObserver * pObserver )
 }
 
 
-void LoonySettingsManager::RemoveSettingsObserver( SettingsObserver * pObserver )
+void McOptionsManager::RemoveSettingsObserver( SettingsObserver * pObserver )
 {
 	if ( !pObserver )
 	{
@@ -543,7 +543,7 @@ void LoonySettingsManager::RemoveSettingsObserver( SettingsObserver * pObserver 
 }
 
 
-void LoonySettingsManager::UpdateSettingsObservers( const stringType & GroupName, const stringType & SettingName )
+void McOptionsManager::UpdateSettingsObservers( const stringType & GroupName, const stringType & SettingName )
 {
 	for ( SettingsObserversIterator iter = SettingsObserversList.begin(); iter != SettingsObserversList.end(); ++iter )
 	{
@@ -559,7 +559,7 @@ SettingsObserver::SettingsObserver()
 }
 
 
-void SettingsObserver::OnObserverAdded( LoonySettingsManager * SettingsManager )
+void SettingsObserver::OnObserverAdded( McOptionsManager * SettingsManager )
 {
 	pSettingsManager = SettingsManager;
 }

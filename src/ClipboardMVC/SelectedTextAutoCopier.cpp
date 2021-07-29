@@ -19,8 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
 #include "SelectedTextAutoCopier.h"
-#include "ClipboardList.h"
-#include "MultiClipboardSettings.h"
+#include "ArraysOfClips.h"
+#include "McOptions.h"
 #endif
 
 extern MultiClipboardProxy	g_ClipboardProxy;
@@ -35,7 +35,7 @@ SelectedTextAutoCopier::SelectedTextAutoCopier()
 }
 
 
-void SelectedTextAutoCopier::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
+void SelectedTextAutoCopier::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings )
 {
 	IController::Init( pNewModel, pClipboardProxy, pSettings );
 	pClipboardProxy->RegisterClipboardListener( this );
@@ -81,7 +81,7 @@ void SelectedTextAutoCopier::OnTextPasted()
 		g_ClipboardProxy.SetTextToSystemClipboard( SystemClipboardBackup );
 
 		// Move the corresponding clipboard list entry to the top
-		ClipboardList * pClipboardList = (ClipboardList*)GetModel();
+		ArraysOfClips * pClipboardList = (ArraysOfClips*)GetModel();
 		int clipboardItemIndex = pClipboardList->GetTextItemIndex( SystemClipboardBackup );
 		if ( clipboardItemIndex >= 0 )
 		{
@@ -144,7 +144,7 @@ void SelectedTextAutoCopier::OnTimer()
 		{
 			TextItem CurrentSelectionText;
 			g_ClipboardProxy.GetSelectionText( CurrentSelectionText );
-			ClipboardList * pClipboardList = (ClipboardList*)GetModel();
+			ArraysOfClips * pClipboardList = (ArraysOfClips*)GetModel();
 			// Update the clipboard list entry with the new selection
 			if ( pClipboardList->ModifyTextItem( PreviousSelectionText, CurrentSelectionText ) )
 			{
@@ -184,7 +184,7 @@ void SelectedTextAutoCopier::OnCyclicPasteEnd()
 }
 
 
-void SelectedTextAutoCopier::OnObserverAdded( LoonySettingsManager * SettingsManager )
+void SelectedTextAutoCopier::OnObserverAdded( McOptionsManager * SettingsManager )
 {
 	SettingsObserver::OnObserverAdded( SettingsManager );
 

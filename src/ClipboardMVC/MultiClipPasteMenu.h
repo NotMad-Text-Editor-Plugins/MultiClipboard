@@ -34,10 +34,10 @@ class MultiClipPasteMenu : public IController, public MouseListener, public KeyL
 {
 public:
 	MultiClipPasteMenu();
-	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings );
+	virtual void Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings );
 
-	void ShowPasteMenu();
-	bool IsUsePasteMenu() { return bUsePasteMenu; }
+	void show();
+	bool isEnabled() { return bUsePasteMenu; }
 
 	virtual BOOL OnMouseEvent( MouseEventType eventType, MouseEventFlags eventFlags,
 		INT mouseX, INT mouseY, INT mouseDelta );
@@ -45,7 +45,7 @@ public:
 
 	virtual void OnModelModified();
 
-	virtual void OnObserverAdded( LoonySettingsManager * SettingsManager );
+	virtual void OnObserverAdded( McOptionsManager * SettingsManager );
 	virtual void OnSettingsChanged( const stringType & GroupName, const stringType & SettingName );
 
 private:

@@ -17,8 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef MULTI_CLIPBOARD_LIST_BOX_H
-#define MULTI_CLIPBOARD_LIST_BOX_H
+#ifndef MULTI_CLIPBOARD_EDIT_BOX_H
+#define MULTI_CLIPBOARD_EDIT_BOX_H
 
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
@@ -27,36 +27,32 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #endif
 
 
-// Notification to parent that delete key is pressed
-#define LBN_DELETEITEM LB_MSGMAX+0x100
-
-
-class MultiClipboardListbox : public Window
+class CBEditbox : public Window
 {
 public:
 	virtual void init(HINSTANCE hInst, HWND parent);
 	virtual void destroy();
 
-	virtual void AddItem( std::wstring item );
-	virtual void ClearAll();
-	virtual INT GetItemCount();
+	virtual void SetText( const std::wstring & text );
+	virtual std::wstring GetText();
+	// This should be slightly more efficient due to not pass text around too much
+	virtual void GetText( std::wstring & text );
 
-	virtual INT GetCurrentSelectionIndex();
-	// Selects the specified list box item.
-	// If index out of bounds, and bStrictSelect is TRUE, nothing is selected
-	// else the last item in the list, if available, is selected
-	virtual void SetCurrentSelectedItem( INT NewSelectionIndex, BOOL bStrictSelect=TRUE );
+	virtual void SetEditBoxReadOnly( const BOOL bReadOnly = TRUE );
+	virtual void EnableEditBox( const BOOL bEnable = TRUE );
+	virtual BOOL IsEditBoxEnabled();
 
 private:
-	HFONT hNewFont;
-
 	WNDPROC oldWndProc;
 	// Subclass the list box's wnd proc for customised behavior
 	static LRESULT CALLBACK StaticListboxProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 	{
-		return ((MultiClipboardListbox *)(::GetWindowLongPtr(hwnd, GWLP_USERDATA)))->runProc( hwnd, message, wParam, lParam );
+		return ((CBEditbox *)(::GetWindowLongPtr(hwnd, GWLP_USERDATA)))->runProc( hwnd, message, wParam, lParam );
 	};
+
 	LRESULT runProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
+
+	HFONT hNewFont;
 };
 
 

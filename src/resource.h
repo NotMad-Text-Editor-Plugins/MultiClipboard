@@ -47,6 +47,9 @@
 #define IDC_CHECK_PASTE_ALL_REVERSE     1014
 #define IDC_CHECK_PASTE_ALL_NEWLINE_BETWEEN 1015
 #define IDC_CHECK_PERSIST_CLIPBOARD_LIST 1016
+#define IDC_EDIT_MAX_CLIPLIST_SIZE_1 1017
+#define IDC_TEXT_MAX_CLIPLIST_SIZE_1 1018
+
 #define IDM_EX_UP                       2001
 #define IDM_EX_DOWN                     2002
 #define IDM_EX_PASTE                    2003

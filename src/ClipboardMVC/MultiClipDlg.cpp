@@ -18,13 +18,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 #ifndef UNITY_BUILD_SINGLE_INCLUDE
-#include "MultiClipViewerDialog.h"
+#include "PluginDefinition.h"
+#include "MultiClipDlg.h"
 #include "resource.h"
-#include "ClipboardList.h"
+#include "ArraysOfClips.h"
 #include "MultiClipboardProxy.h"
 #include "NativeLang_def.h"
-#include "MultiClipboardSettings.h"
-#include "MultiClipboardSettingsDialog.h"
+#include "McOptions.h"
+#include "OptionsDlg.h"
 #endif
 
 
@@ -60,7 +61,7 @@ LPTSTR ListBoxToolBarToolTip[] = {
 extern HINSTANCE g_hInstance;
 extern NppData g_NppData;
 extern MultiClipboardProxy g_ClipboardProxy;
-extern MultiClipboardSettingsDialog OptionsDlg;
+extern OptionsDlg _optDlg;
 
 
 MultiClipViewerDialog::MultiClipViewerDialog()
@@ -81,7 +82,7 @@ MultiClipViewerDialog::~MultiClipViewerDialog()
 {
 }
 
-void MultiClipViewerDialog::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, LoonySettingsManager * pSettings )
+void MultiClipViewerDialog::Init( IModel * pNewModel, MultiClipboardProxy * pClipboardProxy, McOptionsManager * pSettings )
 {
 	DockingDlgInterface::init( g_hInstance, g_NppData._nppHandle );
 	IController::Init( pNewModel, pClipboardProxy, pSettings );
@@ -120,8 +121,14 @@ void MultiClipViewerDialog::ShowDialog( bool Show )
 
 		::SendMessage( _hParent, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&TBData );
 	}
+	//DockingDlgInterface::display(Show);
 
 	display( Show );
+
+	//setClosed(!Show);
+	::SendMessage(nppData._nppHandle, NPPM_SETMENUITEMCHECK, funcItem[0]._cmdID, Show);
+
+
 	IsShown = Show;
 	//::SendMessage( _hSelf, SELF_REFRESH, LocationPos, 0);
 	ShowClipText();
@@ -138,79 +145,90 @@ INT_PTR CALLBACK MultiClipViewerDialog::run_dlgProc( UINT msg, WPARAM wp, LPARAM
 
 	switch ( msg )
 	{
-	case WM_INITDIALOG:
-	{
-		MultiClipViewerPanel.init( _hInst, _hSelf );
+		case WM_INITDIALOG:
+		{
+			NppDarkMode::initDarkMode();
 
-		ListBoxPanel.init( _hInst, MultiClipViewerPanel.getHSelf() );
-		MultiClipViewerListbox.init( _hInst, ListBoxPanel.getHSelf() );
-		MultiClipViewerPanel.pChildWin1 = &ListBoxPanel;
-		ListBoxPanel.SetChildWindow( &MultiClipViewerListbox );
-		ListBoxToolBar.init( _hInst, ListBoxPanel.getHSelf(), TB_STANDARD, ListBoxToolBarButtons, ListBoxToolBarSize );
-		ListBoxToolBar.display();
-		ListBoxPanel.SetToolbar( &ListBoxToolBar );
+			_cbViewer.init( _hInst, _hSelf );
 
-		EditBoxPanel.init( _hInst, MultiClipViewerPanel.getHSelf() );
-		MultiClipViewerEditBox.init( _hInst, EditBoxPanel.getHSelf() );
-		MultiClipViewerPanel.pChildWin2 = &EditBoxPanel;
-		EditBoxPanel.SetChildWindow( &MultiClipViewerEditBox );
-		MultiClipViewerEditBox.EnableEditBox( FALSE );
+			_cbListP.init( _hInst, _cbViewer.getHSelf() );
+
+			_cbList.init( _hInst, _cbListP.getHSelf() );
+
+			_cbViewer.pChildWin1 = &_cbListP;
+			_cbListP.SetChildWindow( &_cbList );
+			_cbToolbar.init( _hInst, _cbListP.getHSelf(), TB_STANDARD, ListBoxToolBarButtons, ListBoxToolBarSize );
+			_cbToolbar.display();
+			_cbListP.SetToolbar( &_cbToolbar );
 
 
-		bool enlarge_text = ::SendMessage(g_NppData._nppHandle, NPPM_GETENLARGETEXT, 0, 0);
-		if(enlarge_text) {
-			auto hFont = CreateFontIndirectly(-21, true);
-			setWindowFont(_hSelf, hFont);
+			_cbEditP.init( _hInst, _cbViewer.getHSelf() );
+			_cbEdit.init( _hInst, _cbEditP.getHSelf() );
+			_cbViewer.pChildWin2 = &_cbEditP;
+			_cbEditP.SetChildWindow( &_cbEdit );
+			_cbEdit.EnableEditBox( FALSE );
+
+			refreshDarkMode();
+
+
+			bool enlarge_text = ::SendMessage(g_NppData._nppHandle, NPPM_GETENLARGETEXT, 0, 0);
+			if(enlarge_text) {
+				auto hFont = CreateFontIndirectly(-21, true);
+				setWindowFont(_hSelf, hFont);
+			}
+
+			break;
 		}
 
-		break;
-	}
-
-	case WM_SIZE:
-	case WM_MOVE:
+		case WM_SIZE:
+		case WM_MOVE:
 		{
 			RECT rc;
 			getClientRect(rc);
 			SetSplitterOrientation();
-			MultiClipViewerPanel.reSizeTo(rc);
+			_cbViewer.reSizeTo(rc);
+			//::MoveWindow(_hSelf, rc.left, rc.top, rc.right, rc.bottom, 0);
+			//UpdateWindow(_hSelf);
 			break;
 		}
 
-	case WM_COMMAND:
-		if ( (HWND)lp == MultiClipViewerListbox.getHSelf() )
+		case WM_COMMAND:
 		{
-			switch ( HIWORD(wp) )
+			if ( (HWND)lp == _cbList.getHSelf() )
 			{
-			case LBN_SELCHANGE:
-				OnListSelectionChanged();
-				return 0;
+				switch ( HIWORD(wp) )
+				{
+				case LBN_SELCHANGE:
+					OnListSelectionChanged();
+					return 0;
 
-			case LBN_DBLCLK:
-				OnListDoubleClicked();
-				return 0;
+				case LBN_DBLCLK:
+					OnListDoubleClicked();
+					return 0;
 
-			case LBN_DELETEITEM:
-				DeleteSelectedItem();
+				case LBN_DELETEITEM:
+					DeleteSelectedItem();
+					return 0;
+				}
+			}
+			else if ( (HWND)lp == _cbEdit.getHSelf() )
+			{
+				switch ( HIWORD(wp) )
+				{
+				case EN_UPDATE:
+					OnEditBoxUpdated();
+					return 0;
+				}
+			}
+			else if ( (HWND)lp == _cbToolbar.getHSelf() )
+			{
+				OnToolBarCommand( LOWORD(wp) );
 				return 0;
 			}
-		}
-		else if ( (HWND)lp == MultiClipViewerEditBox.getHSelf() )
-		{
-			switch ( HIWORD(wp) )
-			{
-			case EN_UPDATE:
-				OnEditBoxUpdated();
-				return 0;
-			}
-		}
-		else if ( (HWND)lp == ListBoxToolBar.getHSelf() )
-		{
-			OnToolBarCommand( LOWORD(wp) );
-			return 0;
 		}
 		break;
 
-	case WM_NOTIFY:
+		case WM_NOTIFY:
 		{
 			LPNMHDR nmhdr = (LPNMHDR) lp;
 			if ( nmhdr->hwndFrom == _hParent )
@@ -252,7 +270,7 @@ INT_PTR CALLBACK MultiClipViewerDialog::run_dlgProc( UINT msg, WPARAM wp, LPARAM
 					pt.x = lpnm->rc.left;
 					pt.y = lpnm->rc.bottom;
 					ClientToScreen( nmhdr->hwndFrom, &pt );
-					OnToolBarCommand( ListBoxToolBar.doPopop( pt ) );
+					OnToolBarCommand( _cbToolbar.doPopop( pt ) );
 					return TRUE;
 				}
 				break;
@@ -265,13 +283,13 @@ INT_PTR CALLBACK MultiClipViewerDialog::run_dlgProc( UINT msg, WPARAM wp, LPARAM
 			break;
 		}
 
-	case WM_DESTROY:
-		// Destroy icon of tab
-		::DestroyIcon( TBData.hIconTab );
-		break;
+		case WM_DESTROY:
+			// Destroy icon of tab
+			::DestroyIcon( TBData.hIconTab );
+			break;
 
-	default:
-		return DockingDlgInterface::run_dlgProc( msg, wp, lp );
+		default:
+			return DockingDlgInterface::run_dlgProc( msg, wp, lp );
 	}
 
 	return TRUE;
@@ -287,22 +305,22 @@ void MultiClipViewerDialog::SetSplitterOrientation()
 	{
 		if ( (rc.bottom-rc.top) >= (rc.right-rc.left) )
 		{
-			MultiClipViewerPanel.SetSplitterPanelOrientation( ESPO_VERTICAL );
+			_cbViewer.SetSplitterPanelOrientation( ESPO_VERTICAL );
 		}
 		else
 		{
-			MultiClipViewerPanel.SetSplitterPanelOrientation( ESPO_HORIZONTAL );
+			_cbViewer.SetSplitterPanelOrientation( ESPO_HORIZONTAL );
 		}
 	}
 	else
 	{
-		if ( _iDockedPos == CONT_LEFT || _iDockedPos == CONT_RIGHT )
+		if ( _iDockedPos == APP_LAYOUT_RNG_LEFT || _iDockedPos == APP_LAYOUT_RNG_RIGHT )
 		{
-			MultiClipViewerPanel.SetSplitterPanelOrientation( ESPO_VERTICAL );
+			_cbViewer.SetSplitterPanelOrientation( ESPO_VERTICAL );
 		}
 		else
 		{
-			MultiClipViewerPanel.SetSplitterPanelOrientation( ESPO_HORIZONTAL );
+			_cbViewer.SetSplitterPanelOrientation( ESPO_HORIZONTAL );
 		}
 	}
 }
@@ -313,6 +331,21 @@ void MultiClipViewerDialog::OnModelModified()
 	ShowClipText();
 }
 
+void MultiClipViewerDialog::refreshDarkMode()
+{
+	NppDarkMode::refreshDarkMode(getHSelf());
+
+	if (isCreated())
+	{
+		NppDarkMode::autoSubclassAndThemeChildControls(_hSelf);
+		::SendMessage(getHSelf(), WM_SIZE, 0, 0);
+	}
+	if (_optDlg.isCreated())
+	{
+		::SendMessage(_optDlg.getHSelf(), NPPN_DARKCONF_CHANGED, 0, 0);
+	}
+}
+
 
 void MultiClipViewerDialog::ShowClipText()
 {
@@ -321,34 +354,29 @@ void MultiClipViewerDialog::ShowClipText()
 		return;
 	}
 
-	ClipboardList * pClipboardList = (ClipboardList *)GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips *)GetModel();
 	if ( !pClipboardList )
 	{
 		return;
 	}
 
-	MultiClipViewerListbox.ClearAll();
+	_cbList.ClearAll();
 	for ( unsigned int i = 0; i < pClipboardList->GetNumText(); ++i )
 	{
-		std::wstring textToAdd = pClipboardList->GetText( i ).text;
-		if ( textToAdd.size() > 100 )
-		{
-			textToAdd.resize( 100 );
-		}
-		MultiClipViewerListbox.AddItem( textToAdd );
+		_cbList.AddItem( pClipboardList->GetText(i).text );
 	}
 }
 
 
 void MultiClipViewerDialog::OnListSelectionChanged()
 {
-	INT Index = MultiClipViewerListbox.GetCurrentSelectionIndex();
+	INT Index = _cbList.GetCurrentSelectionIndex();
 	if ( Index == LB_ERR )
 	{
 		return;
 	}
 
-	ClipboardList * pClipboardList = (ClipboardList *)GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips *)GetModel();
 	const std::wstring & text = pClipboardList->GetText( Index ).text;
 	// Check if text is too large, and we only want to display a bit of it, read-only
 	if ( bNoEditLargeText && text.size() > NoEditLargeTextSize )
@@ -365,18 +393,18 @@ void MultiClipViewerDialog::OnListSelectionChanged()
 		// Append snippet of text to edit box, up to 1024 chars long
 		unsigned int textSize = text.size() > LargeTextDisplaySize ? LargeTextDisplaySize : text.size();
 		largeTextDisplay += text.substr( 0, textSize );
-		MultiClipViewerEditBox.SetText( largeTextDisplay.c_str() );
+		_cbEdit.SetText( largeTextDisplay.c_str() );
 		// And make it enabled, but read-only
-		MultiClipViewerEditBox.EnableEditBox();
-		MultiClipViewerEditBox.SetEditBoxReadOnly( TRUE );
+		_cbEdit.EnableEditBox();
+		_cbEdit.SetEditBoxReadOnly( TRUE );
 	}
 	else
 	{
 		// Else, just display all the text and make it editable
-		MultiClipViewerEditBox.SetText( text.c_str() );
-		MultiClipViewerEditBox.EnableEditBox();
+		_cbEdit.SetText( text.c_str() );
+		_cbEdit.EnableEditBox();
 		// And make it read-write
-		MultiClipViewerEditBox.SetEditBoxReadOnly( FALSE );
+		_cbEdit.SetEditBoxReadOnly( FALSE );
 	}
 	//g_ClipboardProxy.SetFocusToDocument();
 }
@@ -390,17 +418,17 @@ void MultiClipViewerDialog::OnListDoubleClicked()
 
 void MultiClipViewerDialog::OnEditBoxUpdated()
 {
-	ClipboardList * pClipboardList = (ClipboardList *)IController::GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips *)IController::GetModel();
 	if ( !pClipboardList )
 	{
 		return;
 	}
 
 	std::wstring text;
-	MultiClipViewerEditBox.GetText( text );
-	int SelIndex = MultiClipViewerListbox.GetCurrentSelectionIndex();
+	_cbEdit.GetText( text );
+	int SelIndex = _cbList.GetCurrentSelectionIndex();
 	pClipboardList->EditText( SelIndex, text );
-	MultiClipViewerListbox.SetCurrentSelectedItem( SelIndex );
+	_cbList.SetCurrentSelectedItem( SelIndex );
 }
 
 
@@ -432,7 +460,7 @@ void MultiClipViewerDialog::OnToolBarRequestToolTip( LPNMHDR nmhdr )
 
 void MultiClipViewerDialog::OnToolBarCommand( UINT Cmd )
 {
-	ClipboardList * pClipboardList = (ClipboardList *)IController::GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips *)IController::GetModel();
 	if ( !pClipboardList )
 	{
 		return;
@@ -450,12 +478,12 @@ void MultiClipViewerDialog::OnToolBarCommand( UINT Cmd )
 		return;
 
 	case IDM_EX_OPTIONS:
-		OptionsDlg.ShowDialog(!OptionsDlg.isVisible());
+		_optDlg.ShowDialog(!_optDlg.isVisible());
 		return;
 	}
 
 	// Commands below need an active selection in the list box
-	int SelIndex = MultiClipViewerListbox.GetCurrentSelectionIndex();
+	int SelIndex = _cbList.GetCurrentSelectionIndex();
 	if ( SelIndex < 0 || SelIndex >= (int)pClipboardList->GetNumText() )
 	{
 		return;
@@ -467,7 +495,7 @@ void MultiClipViewerDialog::OnToolBarCommand( UINT Cmd )
 		if ( SelIndex > 0 )
 		{
 			pClipboardList->SetTextNewIndex( SelIndex, SelIndex-1 );
-			MultiClipViewerListbox.SetCurrentSelectedItem( SelIndex-1 );
+			_cbList.SetCurrentSelectedItem( SelIndex-1 );
 		}
 		break;
 
@@ -475,7 +503,7 @@ void MultiClipViewerDialog::OnToolBarCommand( UINT Cmd )
 		if ( SelIndex < (int)pClipboardList->GetNumText()-1 )
 		{
 			pClipboardList->SetTextNewIndex( SelIndex, SelIndex+1 );
-			MultiClipViewerListbox.SetCurrentSelectedItem( SelIndex+1 );
+			_cbList.SetCurrentSelectedItem( SelIndex+1 );
 		}
 		break;
 
@@ -499,14 +527,14 @@ BOOL MultiClipViewerDialog::OnDragListMessage( LPDRAGLISTINFO pDragListInfo )
 
 	if ( pDragListInfo->uNotification == DL_BEGINDRAG )
 	{
-		int listBoxItem = LBItemFromPt( MultiClipViewerListbox.getHSelf(), pDragListInfo->ptCursor, FALSE );
+		int listBoxItem = LBItemFromPt( _cbList.getHSelf(), pDragListInfo->ptCursor, FALSE );
 		if ( listBoxItem >= 0 )
 		{
 
-			ClipboardList * pClipboardList = (ClipboardList *)IController::GetModel();
+			ArraysOfClips * pClipboardList = (ArraysOfClips *)IController::GetModel();
 			if ( pClipboardList )
 			{
-				const ClipboardListItem & textItem = pClipboardList->GetText( listBoxItem );
+				const DataOfClip & textItem = pClipboardList->GetText( listBoxItem );
 				unsigned int textSizeInBytes = (textItem.text.size() + 1) * 2;	// Wide char = 2 bytes + null terminator
 
 				pDataObject->SetMultiClipDragData( textItem.text.c_str(), textSizeInBytes, textItem.textMode == TCM_COLUMN );
@@ -525,14 +553,14 @@ BOOL MultiClipViewerDialog::OnDragListMessage( LPDRAGLISTINFO pDragListInfo )
 
 void MultiClipViewerDialog::PasteSelectedItem()
 {
-	INT Index = MultiClipViewerListbox.GetCurrentSelectionIndex();
+	INT Index = _cbList.GetCurrentSelectionIndex();
 	if ( Index == LB_ERR )
 	{
 		return;
 	}
 
-	MultiClipViewerEditBox.EnableEditBox();
-	ClipboardList * pClipboardList = (ClipboardList *)GetModel();
+	_cbEdit.EnableEditBox();
+	ArraysOfClips * pClipboardList = (ArraysOfClips *)GetModel();
 	g_ClipboardProxy.PasteTextToNpp( pClipboardList->GetText( Index ) );
 	g_ClipboardProxy.SetFocusToDocument();
 }
@@ -540,7 +568,7 @@ void MultiClipViewerDialog::PasteSelectedItem()
 
 void MultiClipViewerDialog::PasteAllItems()
 {
-	ClipboardList * pClipboardList = (ClipboardList *)GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips *)GetModel();
 	if ( pClipboardList->GetNumText() == 0 )
 	{
 		return;
@@ -578,12 +606,12 @@ void MultiClipViewerDialog::PasteAllItems()
 
 void MultiClipViewerDialog::DeleteSelectedItem()
 {
-	ClipboardList * pClipboardList = (ClipboardList *)IController::GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips *)IController::GetModel();
 	if ( !pClipboardList )
 	{
 		return;
 	}
-	int SelIndex = MultiClipViewerListbox.GetCurrentSelectionIndex();
+	int SelIndex = _cbList.GetCurrentSelectionIndex();
 	if ( SelIndex < 0 || SelIndex >= (int)pClipboardList->GetNumText() )
 	{
 		return;
@@ -591,14 +619,14 @@ void MultiClipViewerDialog::DeleteSelectedItem()
 
 	pClipboardList->RemoveText( SelIndex );
 	// Select the next item in the list
-	MultiClipViewerListbox.SetCurrentSelectedItem( SelIndex, FALSE );
+	_cbList.SetCurrentSelectedItem( SelIndex, FALSE );
 	// Check whether selection is successful
-	SelIndex = MultiClipViewerListbox.GetCurrentSelectionIndex();
+	SelIndex = _cbList.GetCurrentSelectionIndex();
 	if ( SelIndex < 0 || SelIndex >= (int)pClipboardList->GetNumText() )
 	{
 		// Not successful, clear and disable textbox
-		MultiClipViewerEditBox.SetText( std::wstring() );
-		MultiClipViewerEditBox.EnableEditBox( FALSE );
+		_cbEdit.SetText( std::wstring() );
+		_cbEdit.EnableEditBox( FALSE );
 	}
 	else
 	{
@@ -609,7 +637,7 @@ void MultiClipViewerDialog::DeleteSelectedItem()
 
 void MultiClipViewerDialog::DeleteAllItems()
 {
-	ClipboardList * pClipboardList = (ClipboardList *)IController::GetModel();
+	ArraysOfClips * pClipboardList = (ArraysOfClips *)IController::GetModel();
 	if ( !pClipboardList )
 	{
 		return;
@@ -617,27 +645,27 @@ void MultiClipViewerDialog::DeleteAllItems()
 
 	pClipboardList->RemoveAllTexts();
 	// Clear and disable textbox since there is nothing left
-	MultiClipViewerEditBox.SetText( std::wstring() );
-	MultiClipViewerEditBox.EnableEditBox( FALSE );
+	_cbEdit.SetText( std::wstring() );
+	_cbEdit.EnableEditBox( FALSE );
 }
 
 
 void MultiClipViewerDialog::CopySelectedItemToClipboard()
 {
-	INT Index = MultiClipViewerListbox.GetCurrentSelectionIndex();
+	INT Index = _cbList.GetCurrentSelectionIndex();
 	if ( Index == LB_ERR )
 	{
 		return;
 	}
 
-	MultiClipViewerEditBox.EnableEditBox();
-	ClipboardList * pClipboardList = (ClipboardList *)GetModel();
+	_cbEdit.EnableEditBox();
+	ArraysOfClips * pClipboardList = (ArraysOfClips *)GetModel();
 	g_ClipboardProxy.SetTextToSystemClipboard( pClipboardList->GetText( Index ) );
 	g_ClipboardProxy.SetFocusToDocument();
 }
 
 
-void MultiClipViewerDialog::OnObserverAdded( LoonySettingsManager * SettingsManager )
+void MultiClipViewerDialog::OnObserverAdded( McOptionsManager * SettingsManager )
 {
 	SettingsObserver::OnObserverAdded( SettingsManager );
 
