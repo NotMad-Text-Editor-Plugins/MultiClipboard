@@ -4,7 +4,7 @@
 - This repo needs to be compiled against the [《图创文本》](https://github.com/KnIfER/Textrument) Opensource Project.
 - Compatible with NotepadPlus v8. 
 - Supports Darkmode
-- Store **more** to the list (on), but show **less** for the paste menu (10).
+- Store **more** to the list (default 20), but show **less** for the paste menu (default 10).
 
 
 
