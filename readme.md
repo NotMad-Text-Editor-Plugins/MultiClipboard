@@ -1,10 +1,11 @@
-![](../master/res/paste_muple.ico)  VS-like Multiple Clipboard Plugin for Notepad++.
+![](./res/paste_muple.ico)  VS-like Multiple Clipboard Plugin for Notepad++.
 
-- Upgraded from https://www.peepor.net/loonchew/download.php?f=multiclipboard_2_0_0_src
-- Being part of the NotMad Project, this repo need to be compiled against https://github.com/KnIfER/NotMad-Text-Editor 
-- Compatible with Notepad++ v7. 
+- Originally written by LoonyChewy
+- This repo needs to be compiled against the [《图创文本》](https://github.com/KnIfER/Textrument) Opensource Project.
+- Compatible with NotepadPlus v8. 
+- Supports Darkmode
+- Store **more** to the list (on), but show **less** for the paste menu (10).
 
-- dependency NativeLang_def.h
 
 
 MultiClipboard 2

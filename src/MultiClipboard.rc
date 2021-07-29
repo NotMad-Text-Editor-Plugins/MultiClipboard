@@ -18,8 +18,8 @@ STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_BORDER | WS_SYSMENU
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "&Ok",1,110,120,50,14
-    CTEXT           "MultiClipboard Plugin v2.1 for Notepad++",IDC_ABOUT_TITLE,7,7,257,17,SS_CENTERIMAGE,WS_EX_DLGMODALFRAME | WS_EX_TRANSPARENT
-    LTEXT           "Author:\t\tLoonyChewy",IDC_ABOUT_AUTHOR,12,31,183,9
+    CTEXT           "MultiClipboard Plugin v2.2 for the Textrument Editor",IDC_ABOUT_TITLE,7,7,257,17,SS_CENTERIMAGE,WS_EX_DLGMODALFRAME | WS_EX_TRANSPARENT
+    LTEXT           "Original Author:\t\tLoonyChewy",IDC_ABOUT_AUTHOR,12,31,183,9
     LTEXT           "eMail:",IDC_ABOUT_EMAIL,12,41,21,8
     LTEXT           "loonychewy@users.sourceforge.net",IDC_EMAIL_LINK,65,41,147,8
     LTEXT           "URL:",IDC_ABOUT_URL,12,52,21,8
@@ -131,13 +131,13 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "CompanyName", "LoonyChewy"
-            VALUE "FileDescription", "MultiClipboard plugin (unicode) for Notepad++"
-            VALUE "FileVersion", "2, 1, 0, 0"
+            VALUE "FileDescription", "MultiClipboard plugin for the Textrument Editor"
+            VALUE "FileVersion", "2, 2, 0, 0"
             VALUE "InternalName", "MultiClipboard"
             VALUE "LegalCopyright", "Copyright ??? 2011"
             VALUE "OriginalFilename", "MultiClipboard.dll"
             VALUE "ProductName", "MultiClipboard"
-            VALUE "ProductVersion", "2, 1, 0, 0"
+            VALUE "ProductVersion", "2, 2, 0, 0"
         END
     END
     BLOCK "VarFileInfo"
